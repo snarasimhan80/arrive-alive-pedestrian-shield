@@ -62,6 +62,10 @@ def include(path):
 
 
 def build(allow_unvalidated=False):
+    if (ROOT/'.git').exists() and not allow_unvalidated:
+        dirty = subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True)
+        if dirty:
+            raise RuntimeError('Commit source changes before building a validated Git release')
     if not allow_unvalidated:
         check_validation()
     files = {}
