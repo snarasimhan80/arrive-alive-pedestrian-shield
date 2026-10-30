@@ -9,6 +9,8 @@ __pycache__/
 *.key
 id_rsa*
 id_ed25519*
+krsaangi-footpath-deployer*
+Pedestrian-Shield-Deployment-Access.zip
 jobs/
 artifacts/
 dist/

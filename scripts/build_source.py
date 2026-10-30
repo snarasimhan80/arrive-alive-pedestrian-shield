@@ -54,7 +54,7 @@ def include(path):
     if any(part in EXCLUDED for part in relative.parts):
         return False
     name = path.name
-    if name.startswith(('.env', 'id_rsa', 'id_ed25519')):
+    if name.startswith(('.env', 'id_rsa', 'id_ed25519', 'krsaangi-footpath-deployer')) or name == 'Pedestrian-Shield-Deployment-Access.zip':
         return False
     return not ((name.startswith('source') and name.endswith('.zip'))
                 or name in {'.DS_Store', 'BUILD_MANIFEST.json', 'RELEASE.json', 'generation.log', 'render-command.json', 'generated.mp4'}

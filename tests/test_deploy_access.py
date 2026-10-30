@@ -20,6 +20,17 @@ def load(name):
 
 gateway = load('ssh_gateway')
 release = load('krsaangi_release')
+builder_spec = importlib.util.spec_from_file_location('builder', ROOT/'scripts/build_source.py')
+builder = importlib.util.module_from_spec(builder_spec)
+builder_spec.loader.exec_module(builder)
+
+
+class CredentialPublicationTests(unittest.TestCase):
+    def test_handover_credentials_never_enter_source_archives(self):
+        for name in ['krsaangi-footpath-deployer', 'krsaangi-footpath-deployer.pub',
+                     'Pedestrian-Shield-Deployment-Access.zip', 'secret.pem', '.env']:
+            with self.subTest(name=name):
+                self.assertFalse(builder.include(ROOT/'nested'/name))
 
 
 class GatewayTests(unittest.TestCase):
