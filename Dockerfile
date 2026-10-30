@@ -21,6 +21,7 @@ RUN pip install --no-cache-dir torch==2.14.0 torchvision==0.29.0 --index-url htt
 COPY --chown=user:user . .
 
 USER user
-RUN python scripts/build_source.py --allow-unvalidated
+RUN mkdir -p /home/user/jobs \
+    && python scripts/build_source.py --allow-unvalidated
 EXPOSE 7860
 CMD ["gunicorn", "--workers", "1", "--threads", "4", "--bind", "0.0.0.0:7860", "--timeout", "120", "app:app"]
