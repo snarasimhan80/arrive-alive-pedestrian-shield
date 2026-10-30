@@ -27,29 +27,27 @@ analysis job. It has `MemoryMax=1G`, `CPUQuota=75%`, `HOSTED_DEMO=1` and
 and Nginx reference examples under `deploy/` omit certificates and secrets;
 do not overwrite a shared Nginx site with a snippet.
 
-## Access prerequisites
+## Restricted deployment access
 
-1. Read access to this public GitHub repository. Write changes through a
-   collaborator invitation or a fork and pull request.
-2. Your own authorized SSH account/key on Krsaangi. An administrator grants
-   it; neither cloning the repository nor the deployment script grants it.
-3. The approved account must be allowed to run `sudo -n python3` for the
-   provided server helper. This is administrator access, not a restricted
-   app-only role. An administrator can instead run the commands themselves.
-   Do not copy the owner's private key into the repo or GitHub secrets.
-4. Existing Git, Python 3, systemd, CPU dependencies and the app venv on the
-   server. The normal helper retains that environment and rejects changes
-   to the two runtime requirements files.
+Use the dedicated `footpath-deployer` account and the private key supplied
+by the owner. General administrator access is **not** required for ordinary
+code updates. This account has a forced SSH gateway and can only upload a
+release, deploy it, roll back, check status or read this demo's recent logs.
+It cannot start a shell, run arbitrary sudo/Python commands, use SFTP/SCP,
+forward ports, change Nginx, install packages or manage other services.
 
-Test access (substitute your actual login or SSH-config alias):
+Put the key at `~/.ssh/krsaangi-footpath-deployer` with mode 600. On the first
+connection, confirm the host fingerprint supplied by the owner:
 
 ```sh
-ssh YOUR_SSH_USER@134.209.149.217 'sudo -n systemctl is-active arrive-alive-module3.service'
-python scripts/deploy_krsaangi.py status --host YOUR_SSH_USER@134.209.149.217
+ssh -i ~/.ssh/krsaangi-footpath-deployer -o IdentitiesOnly=yes footpath-deployer@134.209.149.217 status
+python scripts/deploy_krsaangi.py status --identity ~/.ssh/krsaangi-footpath-deployer
 ```
 
-An SSH host-key prompt on a first connection must be checked with the
-server administrator. The helper uses ordinary SSH host verification.
+This command returns JSON instead of a shell; that is intentional. The
+client can also use `--host YOUR_SSH_ALIAS` with `IdentityFile` in your SSH
+config. See [Restricted access](RESTRICTED_ACCESS.md) for owner installation,
+rotation, revocation and the permission boundary.
 
 ## Normal update
 
@@ -61,7 +59,7 @@ git switch main
 git pull --ff-only
 git status --short
 python -m unittest discover -s tests -v
-python scripts/deploy_krsaangi.py deploy --host YOUR_SSH_USER@134.209.149.217 --dry-run
+python scripts/deploy_krsaangi.py deploy --identity ~/.ssh/krsaangi-footpath-deployer --dry-run
 ```
 
 Dry-run uploads and checks a release but does **not** restart or change the
@@ -72,7 +70,7 @@ The helper also reruns all five clips locally and checks `origin/main`.
 Wait for active public analyses to finish, then deploy:
 
 ```sh
-python scripts/deploy_krsaangi.py deploy --host YOUR_SSH_USER@134.209.149.217
+python scripts/deploy_krsaangi.py deploy --identity ~/.ssh/krsaangi-footpath-deployer
 ```
 
 `--skip-tests` may be added when the matching full local acceptance has
@@ -83,7 +81,8 @@ video run twice. The deployment helper:
 1. Requires a clean checkout at the exact commit pushed to `origin/main`.
 2. Builds `dist/source.zip` with models, clips, docs, `RELEASE.json` and a
    complete SHA-256 file inventory.
-3. Uploads to a unique `/tmp` path and checks the archive before stopping
+3. Streams the archive to the restricted inbox, snapshots it into root-only
+   storage, and checks that immutable copy before stopping
    the service. It rejects unsafe paths, symlinks, missing files, syntax
    errors, checksum mismatches and changed runtime requirement files.
 4. Refuses currently visible queued/running analyses, then stops only
@@ -104,7 +103,7 @@ public analysis. A semantically bad but healthy release needs manual rollback.
 
 ```sh
 curl --fail https://134.209.149.217/footpath-demo/health
-python scripts/deploy_krsaangi.py status --host YOUR_SSH_USER@134.209.149.217
+python scripts/deploy_krsaangi.py status --identity ~/.ssh/krsaangi-footpath-deployer
 python .video-tools/validate_clips.py --mode public
 ```
 
@@ -127,9 +126,9 @@ unzip -p /tmp/pedestrian-shield-source.zip RELEASE.json
 List existing backups, select the exact ID, then restore it:
 
 ```sh
-python scripts/deploy_krsaangi.py status --host YOUR_SSH_USER@134.209.149.217
-python scripts/deploy_krsaangi.py rollback --host YOUR_SSH_USER@134.209.149.217 --backup BACKUP_ID --dry-run
-python scripts/deploy_krsaangi.py rollback --host YOUR_SSH_USER@134.209.149.217 --backup BACKUP_ID
+python scripts/deploy_krsaangi.py status --identity ~/.ssh/krsaangi-footpath-deployer
+python scripts/deploy_krsaangi.py rollback --identity ~/.ssh/krsaangi-footpath-deployer --backup BACKUP_ID --dry-run
+python scripts/deploy_krsaangi.py rollback --identity ~/.ssh/krsaangi-footpath-deployer --backup BACKUP_ID
 ```
 
 Rollback first backs up the current code too. It retains the same installed
@@ -141,9 +140,15 @@ Backups are retained until an administrator deliberately removes them.
 ## Logs and recovery
 
 ```sh
-ssh YOUR_SSH_USER@134.209.149.217 'sudo journalctl -u arrive-alive-module3.service -n 100 --no-pager'
-ssh YOUR_SSH_USER@134.209.149.217 'sudo systemctl status arrive-alive-module3.service --no-pager'
+python scripts/deploy_krsaangi.py logs --identity ~/.ssh/krsaangi-footpath-deployer
+python scripts/deploy_krsaangi.py status --identity ~/.ssh/krsaangi-footpath-deployer
 ```
+
+The installed root helper is separate from the deployed app. Updating files
+under `deploy/` in a release does not replace that installed helper or the
+SSH/sudo policy. Only the server owner can review and install policy changes.
+The role refuses new releases below 8 GiB free space or after ten backup
+entries; ask the owner to maintain storage if either limit is reached.
 
 Failed new code is kept under `failed-<backup-id>` for diagnosis. If both
 deployment and automatic recovery fail, stop and inspect the printed backup

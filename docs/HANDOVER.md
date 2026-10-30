@@ -17,11 +17,16 @@ developer's GitHub username as a collaborator in repository Settings →
 Collaborators. Alternatively they can fork and submit PRs without write
 access. Review changes before merging to `main`.
 
-For deployment, ask the developer for their **SSH public key** and have the
-server administrator authorize it on their own approved account. The helper
-requires administrator sudo access as described in `DEPLOYMENT.md`. No
-collaborator or new server account is created just by publishing this repo.
-Revoke repository and SSH access separately when the handover ends.
+For updates to Krsaangi, hand over the dedicated demo deployment key
+privately, or ask the owner to authorize the developer's own public key on
+the restricted `footpath-deployer` account. No administrator account or
+owner's SSH key needs to be shared. The private deployment credential is
+not part of GitHub or `/source.zip`. See `RESTRICTED_ACCESS.md` for the
+boundary and owner-only rotation/revocation instructions.
+
+For hosting on a different server, no Krsaangi credential is needed: use
+the code, included models and Docker/native setup with that server's own
+credentials. Grant GitHub write access and Krsaangi access separately.
 
 ## First session
 

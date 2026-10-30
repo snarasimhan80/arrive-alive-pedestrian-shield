@@ -72,18 +72,20 @@ checks the workflow; it does not establish accuracy on actual CCTV footage.
 
 ## Deploy to Krsaangi
 
-An administrator must grant you your **own SSH access** to the server and
-permission to run deployment commands with `sudo -n`. A GitHub invitation
-alone does not grant server access. No SSH private key or server password is
-stored here. Do not share the owner's key.
+The server owner provides the **demo-only deployment key** for
+`footpath-deployer`. This login supports uploads, deployment, rollback,
+status and this app's logs. It provides no interactive shell, general sudo,
+SFTP or port forwarding. A GitHub invitation does not grant this access.
+Keep the private deployment key outside Git; see
+[Restricted access setup](docs/RESTRICTED_ACCESS.md).
 
 From a reviewed, pushed and clean `main` checkout, with the venv active:
 
 ```sh
 git switch main
 git pull --ff-only
-python scripts/deploy_krsaangi.py deploy --host YOUR_SSH_USER@134.209.149.217 --dry-run
-python scripts/deploy_krsaangi.py deploy --host YOUR_SSH_USER@134.209.149.217
+python scripts/deploy_krsaangi.py deploy --identity ~/.ssh/krsaangi-footpath-deployer --dry-run
+python scripts/deploy_krsaangi.py deploy --identity ~/.ssh/krsaangi-footpath-deployer
 ```
 
 The helper checks the pushed Git commit, reruns clip acceptance, packages
@@ -96,7 +98,7 @@ service restarts; wait for active analyses to finish first.
 ```sh
 curl --fail https://134.209.149.217/footpath-demo/health
 python .video-tools/validate_clips.py --mode public
-python scripts/deploy_krsaangi.py status --host YOUR_SSH_USER@134.209.149.217
+python scripts/deploy_krsaangi.py status --identity ~/.ssh/krsaangi-footpath-deployer
 ```
 
 **[Full deployment, rollback and dependency maintenance guide](docs/DEPLOYMENT.md)**
@@ -120,6 +122,14 @@ GitHub does not automatically modify the server.
 The deployed `/source.zip` includes the source and a `RELEASE.json` identifying
 the deployed Git commit. See [SOURCE_README.md](SOURCE_README.md) for formulas
 and model limitations, and [Handover checklist](docs/HANDOVER.md) for access.
+
+## Hosting on another server
+
+You can host the same code on your own server using the native Python or
+Docker setup. No Krsaangi credentials are needed for that. The Krsaangi
+release script applies only to the existing Krsaangi instance; use your own
+server's deployment process elsewhere. See
+[Hosting elsewhere](docs/LOCAL_DEVELOPMENT.md#hosting-on-another-server).
 
 ## License and media
 

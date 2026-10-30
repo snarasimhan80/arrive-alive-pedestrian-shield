@@ -91,3 +91,25 @@ HOSTED_DEMO=1 python app.py
 
 Run artifacts are written to ignored `artifacts/`; historical evidence in
 `examples/generated-scenarios/VALIDATION.json` stays unchanged.
+
+## Hosting on another server
+
+The code and included models are self-contained. You do not need a Krsaangi
+login to host your own copy. On a Linux server you control, clone this repo,
+install Docker, then build and start the container:
+
+```sh
+docker build -t pedestrian-shield .
+docker volume create pedestrian-shield-jobs
+docker run -d --restart unless-stopped --name pedestrian-shield \
+  -p 127.0.0.1:7860:7860 \
+  -e DEMO_JOBS_DIR=/home/user/jobs \
+  -v pedestrian-shield-jobs:/home/user/jobs pedestrian-shield
+```
+
+Point your own HTTPS reverse proxy/domain at `127.0.0.1:7860`. The app serves
+at `/`; if mounting under a prefix, strip it in the reverse proxy as shown
+in the example under `deploy/`. Use your own certificates and server login.
+Keep the AGPL source download available and the generated footage labelled.
+The Krsaangi deployment helper is specific to the existing Krsaangi service
+and is not needed for your own Docker instance.
