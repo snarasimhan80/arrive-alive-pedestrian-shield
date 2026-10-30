@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "01-parked-car",
+    "title": "A car across the footpath",
+    "description": "Two walkers detour into the road around a car that blocks the pavement.",
+    "footage_type": "generated",
+    "poster": true
+  },
+  {
+    "slug": "02-shop-goods",
+    "title": "Shop goods leave no walking room",
+    "description": "A pedestrian steps into the road to pass crates, sacks and a display table.",
+    "footage_type": "generated",
+    "poster": true
+  },
+  {
+    "slug": "03-motorbike",
+    "title": "A motorcycle blocks the route",
+    "description": "A walker steps around a motorcycle\u2019s front wheel and returns to the footpath.",
+    "footage_type": "generated",
+    "poster": true
+  },
+  {
+    "slug": "04-bicycles",
+    "title": "Bicycles across the pavement",
+    "description": "A walker leaves the footpath to pass the protruding bicycle wheels.",
+    "footage_type": "generated",
+    "poster": true
+  }
+]

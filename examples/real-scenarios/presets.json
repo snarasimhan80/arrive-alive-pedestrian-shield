@@ -1,0 +1,14 @@
+{
+  "0047e3248f27a3ba9055cfbf2bfc0d4dccb6345d637284c5bd9f94a64877eda0": {
+    "name": "Real street example: Istanbul path edge",
+    "footage_type": "real_stock",
+    "polygon": [[0.0, 0.48], [0.32, 0.48], [0.36, 1.0], [0.0, 1.0]],
+    "road_polygon": [[0.37, 0.48], [1.0, 0.48], [1.0, 1.0], [0.37, 1.0]]
+  },
+  "b8111f12f9d1c7256e89b9576d9fa5eb88e02ff1359537b9901fb49fc7f4d079": {
+    "name": "Real street example: clear Brazil footpath",
+    "footage_type": "real_stock",
+    "polygon": [[0.58, 0.36], [0.67, 0.36], [1.0, 1.0], [0.45, 1.0]],
+    "road_polygon": [[0.0, 0.36], [0.45, 0.36], [0.20, 1.0], [0.0, 1.0]]
+  }
+}

@@ -1,0 +1,1043 @@
+{
+  "scope": "Generated-scenario workflow checks, not field accuracy statistics",
+  "local": {
+    "analysis_code_sha256": "b3e42b043d97cafb5ed45fa2bd4283a239fca0ee29936f8bd44ec7b17971d1ed",
+    "runs": [
+      {
+        "slug": "01-parked-car",
+        "job_id": null,
+        "source_sha256": "cb18e1a3069cde5709c7615190906f7c940cd764798ce5330f7f3f551a8332a2",
+        "score": 95,
+        "exits": 2,
+        "near_obstruction": 2,
+        "returns": 2,
+        "road_person_seconds": 8.36,
+        "obstruction_frames": 31,
+        "seconds_to_analyze": 7.6,
+        "source_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "marked_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "events": [
+          {
+            "seconds": 2.4,
+            "track_id": 2,
+            "box": [
+              583,
+              148,
+              659,
+              371
+            ],
+            "from": [
+              538,
+              373
+            ],
+            "to": [
+              621,
+              369
+            ],
+            "blocked_nearby": true,
+            "road_seconds": 3.77,
+            "trail": [
+              [
+                538,
+                373
+              ],
+              [
+                621,
+                369
+              ],
+              [
+                621,
+                369
+              ],
+              [
+                656,
+                359
+              ],
+              [
+                698,
+                331
+              ],
+              [
+                704,
+                316
+              ],
+              [
+                704,
+                303
+              ],
+              [
+                702,
+                283
+              ],
+              [
+                696,
+                280
+              ],
+              [
+                680,
+                270
+              ],
+              [
+                658,
+                252
+              ],
+              [
+                636,
+                206
+              ],
+              [
+                614,
+                185
+              ],
+              [
+                589,
+                177
+              ]
+            ],
+            "snapshot": "screen-02.jpg",
+            "return_seconds": 6.4
+          },
+          {
+            "seconds": 2.9,
+            "track_id": 1,
+            "box": [
+              613,
+              144,
+              715,
+              426
+            ],
+            "from": [
+              560,
+              427
+            ],
+            "to": [
+              664,
+              424
+            ],
+            "blocked_nearby": true,
+            "road_seconds": 4.59,
+            "trail": [
+              [
+                560,
+                427
+              ],
+              [
+                664,
+                424
+              ],
+              [
+                664,
+                424
+              ],
+              [
+                704,
+                413
+              ],
+              [
+                746,
+                398
+              ],
+              [
+                772,
+                371
+              ],
+              [
+                784,
+                364
+              ],
+              [
+                792,
+                344
+              ],
+              [
+                792,
+                327
+              ],
+              [
+                782,
+                318
+              ],
+              [
+                769,
+                294
+              ],
+              [
+                752,
+                283
+              ],
+              [
+                728,
+                265
+              ],
+              [
+                706,
+                241
+              ],
+              [
+                669,
+                237
+              ],
+              [
+                632,
+                188
+              ],
+              [
+                606,
+                186
+              ],
+              [
+                585,
+                169
+              ],
+              [
+                569,
+                155
+              ]
+            ],
+            "snapshot": "screen-03.jpg",
+            "return_seconds": 7.7
+          }
+        ]
+      },
+      {
+        "slug": "02-shop-goods",
+        "job_id": null,
+        "source_sha256": "f809af8ee955b9abd388d42391e2d51e8db932843f21bc833a113b15343c8026",
+        "score": 60,
+        "exits": 1,
+        "near_obstruction": 1,
+        "returns": 1,
+        "road_person_seconds": 3.51,
+        "obstruction_frames": 19,
+        "seconds_to_analyze": 5.7,
+        "source_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "marked_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "events": [
+          {
+            "seconds": 2.9,
+            "track_id": 1,
+            "box": [
+              563,
+              170,
+              667,
+              459
+            ],
+            "from": [
+              518,
+              404
+            ],
+            "to": [
+              615,
+              457
+            ],
+            "blocked_nearby": true,
+            "road_seconds": 3.51,
+            "trail": [
+              [
+                518,
+                404
+              ],
+              [
+                615,
+                457
+              ],
+              [
+                615,
+                457
+              ],
+              [
+                646,
+                454
+              ],
+              [
+                644,
+                451
+              ],
+              [
+                645,
+                411
+              ],
+              [
+                650,
+                408
+              ],
+              [
+                650,
+                374
+              ],
+              [
+                646,
+                366
+              ],
+              [
+                636,
+                348
+              ],
+              [
+                633,
+                322
+              ],
+              [
+                615,
+                290
+              ],
+              [
+                598,
+                293
+              ],
+              [
+                584,
+                280
+              ],
+              [
+                572,
+                262
+              ]
+            ],
+            "snapshot": "screen-02.jpg",
+            "return_seconds": 6.7
+          }
+        ]
+      },
+      {
+        "slug": "03-motorbike",
+        "job_id": null,
+        "source_sha256": "b1d12b2814370c1737c7c2302bfa6ae823b3f6bdbd4173602ced565884031345",
+        "score": 60,
+        "exits": 1,
+        "near_obstruction": 1,
+        "returns": 1,
+        "road_person_seconds": 2.97,
+        "obstruction_frames": 31,
+        "seconds_to_analyze": 5.2,
+        "source_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "marked_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "events": [
+          {
+            "seconds": 2.4,
+            "track_id": 1,
+            "box": [
+              531,
+              211,
+              653,
+              467
+            ],
+            "from": [
+              523,
+              467
+            ],
+            "to": [
+              592,
+              465
+            ],
+            "blocked_nearby": true,
+            "road_seconds": 2.97,
+            "trail": [
+              [
+                523,
+                467
+              ],
+              [
+                592,
+                465
+              ],
+              [
+                592,
+                465
+              ],
+              [
+                604,
+                433
+              ],
+              [
+                609,
+                434
+              ],
+              [
+                614,
+                407
+              ],
+              [
+                610,
+                401
+              ],
+              [
+                602,
+                371
+              ],
+              [
+                598,
+                366
+              ],
+              [
+                592,
+                342
+              ],
+              [
+                576,
+                335
+              ],
+              [
+                558,
+                314
+              ],
+              [
+                549,
+                308
+              ]
+            ],
+            "snapshot": "screen-02.jpg",
+            "return_seconds": 5.6
+          }
+        ]
+      },
+      {
+        "slug": "04-bicycles",
+        "job_id": null,
+        "source_sha256": "863c7fcd9ac22b00e50f29a7b692be314869db22e7d61998e1f90ce794983a55",
+        "score": 59,
+        "exits": 1,
+        "near_obstruction": 1,
+        "returns": 1,
+        "road_person_seconds": 2.16,
+        "obstruction_frames": 31,
+        "seconds_to_analyze": 5.6,
+        "source_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "marked_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "events": [
+          {
+            "seconds": 3.5,
+            "track_id": 1,
+            "box": [
+              561,
+              134,
+              647,
+              403
+            ],
+            "from": [
+              540,
+              422
+            ],
+            "to": [
+              604,
+              401
+            ],
+            "blocked_nearby": true,
+            "road_seconds": 2.16,
+            "trail": [
+              [
+                540,
+                422
+              ],
+              [
+                604,
+                401
+              ],
+              [
+                604,
+                401
+              ],
+              [
+                616,
+                379
+              ],
+              [
+                622,
+                379
+              ],
+              [
+                619,
+                351
+              ],
+              [
+                616,
+                340
+              ],
+              [
+                601,
+                323
+              ],
+              [
+                579,
+                309
+              ],
+              [
+                546,
+                293
+              ]
+            ],
+            "snapshot": "screen-03.jpg",
+            "return_seconds": 5.9
+          }
+        ]
+      },
+      {
+        "slug": "clear-control",
+        "job_id": null,
+        "source_sha256": "b8111f12f9d1c7256e89b9576d9fa5eb88e02ff1359537b9901fb49fc7f4d079",
+        "score": 10,
+        "exits": 0,
+        "near_obstruction": 0,
+        "returns": 0,
+        "road_person_seconds": 0,
+        "obstruction_frames": 0,
+        "seconds_to_analyze": 10.5,
+        "source_video": {
+          "fps": 12.0,
+          "frames": 240
+        },
+        "marked_video": {
+          "fps": 12.0,
+          "frames": 240
+        },
+        "events": []
+      }
+    ]
+  },
+  "public": {
+    "analysis_code_sha256": "b3e42b043d97cafb5ed45fa2bd4283a239fca0ee29936f8bd44ec7b17971d1ed",
+    "runs": [
+      {
+        "slug": "01-parked-car",
+        "job_id": "2c8438a69b9e46879714c91ed783d214",
+        "source_sha256": "cb18e1a3069cde5709c7615190906f7c940cd764798ce5330f7f3f551a8332a2",
+        "score": 95,
+        "exits": 2,
+        "near_obstruction": 2,
+        "returns": 2,
+        "road_person_seconds": 8.36,
+        "obstruction_frames": 31,
+        "seconds_to_analyze": 48.1,
+        "source_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "marked_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "events": [
+          {
+            "blocked_nearby": true,
+            "box": [
+              582,
+              148,
+              659,
+              372
+            ],
+            "from": [
+              538,
+              373
+            ],
+            "return_seconds": 6.4,
+            "road_seconds": 3.77,
+            "seconds": 2.4,
+            "snapshot": "screen-02.jpg",
+            "to": [
+              620,
+              370
+            ],
+            "track_id": 2,
+            "trail": [
+              [
+                538,
+                373
+              ],
+              [
+                620,
+                370
+              ],
+              [
+                620,
+                370
+              ],
+              [
+                656,
+                359
+              ],
+              [
+                698,
+                331
+              ],
+              [
+                704,
+                316
+              ],
+              [
+                704,
+                303
+              ],
+              [
+                702,
+                283
+              ],
+              [
+                696,
+                280
+              ],
+              [
+                679,
+                270
+              ],
+              [
+                658,
+                252
+              ],
+              [
+                636,
+                205
+              ],
+              [
+                614,
+                185
+              ],
+              [
+                589,
+                177
+              ]
+            ]
+          },
+          {
+            "blocked_nearby": true,
+            "box": [
+              613,
+              144,
+              715,
+              426
+            ],
+            "from": [
+              560,
+              426
+            ],
+            "return_seconds": 7.7,
+            "road_seconds": 4.59,
+            "seconds": 2.9,
+            "snapshot": "screen-03.jpg",
+            "to": [
+              664,
+              424
+            ],
+            "track_id": 1,
+            "trail": [
+              [
+                560,
+                426
+              ],
+              [
+                664,
+                424
+              ],
+              [
+                664,
+                424
+              ],
+              [
+                704,
+                413
+              ],
+              [
+                746,
+                399
+              ],
+              [
+                772,
+                371
+              ],
+              [
+                783,
+                363
+              ],
+              [
+                792,
+                344
+              ],
+              [
+                792,
+                326
+              ],
+              [
+                782,
+                318
+              ],
+              [
+                769,
+                294
+              ],
+              [
+                752,
+                283
+              ],
+              [
+                728,
+                265
+              ],
+              [
+                706,
+                241
+              ],
+              [
+                669,
+                237
+              ],
+              [
+                632,
+                188
+              ],
+              [
+                607,
+                186
+              ],
+              [
+                585,
+                169
+              ],
+              [
+                568,
+                155
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "slug": "02-shop-goods",
+        "job_id": "829d044d353e478a847c674fffcbe751",
+        "source_sha256": "f809af8ee955b9abd388d42391e2d51e8db932843f21bc833a113b15343c8026",
+        "score": 60,
+        "exits": 1,
+        "near_obstruction": 1,
+        "returns": 1,
+        "road_person_seconds": 3.78,
+        "obstruction_frames": 19,
+        "seconds_to_analyze": 40.3,
+        "source_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "marked_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "events": [
+          {
+            "blocked_nearby": true,
+            "box": [
+              563,
+              170,
+              667,
+              458
+            ],
+            "from": [
+              518,
+              404
+            ],
+            "return_seconds": 6.7,
+            "road_seconds": 3.78,
+            "seconds": 2.9,
+            "snapshot": "screen-02.jpg",
+            "to": [
+              615,
+              456
+            ],
+            "track_id": 1,
+            "trail": [
+              [
+                518,
+                404
+              ],
+              [
+                615,
+                456
+              ],
+              [
+                615,
+                456
+              ],
+              [
+                646,
+                454
+              ],
+              [
+                644,
+                451
+              ],
+              [
+                645,
+                411
+              ],
+              [
+                650,
+                408
+              ],
+              [
+                652,
+                374
+              ],
+              [
+                646,
+                366
+              ],
+              [
+                636,
+                347
+              ],
+              [
+                632,
+                322
+              ],
+              [
+                615,
+                289
+              ],
+              [
+                598,
+                293
+              ],
+              [
+                584,
+                280
+              ],
+              [
+                572,
+                262
+              ],
+              [
+                547,
+                251
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "slug": "03-motorbike",
+        "job_id": "5cc1dfa661e94924a78389fc8a6fde5b",
+        "source_sha256": "b1d12b2814370c1737c7c2302bfa6ae823b3f6bdbd4173602ced565884031345",
+        "score": 60,
+        "exits": 1,
+        "near_obstruction": 1,
+        "returns": 1,
+        "road_person_seconds": 2.97,
+        "obstruction_frames": 31,
+        "seconds_to_analyze": 37.5,
+        "source_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "marked_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "events": [
+          {
+            "blocked_nearby": true,
+            "box": [
+              531,
+              211,
+              653,
+              467
+            ],
+            "from": [
+              523,
+              467
+            ],
+            "return_seconds": 5.6,
+            "road_seconds": 2.97,
+            "seconds": 2.4,
+            "snapshot": "screen-02.jpg",
+            "to": [
+              592,
+              465
+            ],
+            "track_id": 1,
+            "trail": [
+              [
+                523,
+                467
+              ],
+              [
+                592,
+                465
+              ],
+              [
+                592,
+                465
+              ],
+              [
+                604,
+                433
+              ],
+              [
+                609,
+                434
+              ],
+              [
+                614,
+                407
+              ],
+              [
+                610,
+                401
+              ],
+              [
+                602,
+                371
+              ],
+              [
+                598,
+                365
+              ],
+              [
+                591,
+                342
+              ],
+              [
+                576,
+                335
+              ],
+              [
+                558,
+                314
+              ],
+              [
+                549,
+                308
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "slug": "04-bicycles",
+        "job_id": "35dc755b72a54b2394eb46427ee1196f",
+        "source_sha256": "863c7fcd9ac22b00e50f29a7b692be314869db22e7d61998e1f90ce794983a55",
+        "score": 59,
+        "exits": 1,
+        "near_obstruction": 1,
+        "returns": 1,
+        "road_person_seconds": 2.16,
+        "obstruction_frames": 31,
+        "seconds_to_analyze": 37.7,
+        "source_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "marked_video": {
+          "fps": 15.0,
+          "frames": 121
+        },
+        "events": [
+          {
+            "blocked_nearby": true,
+            "box": [
+              561,
+              134,
+              647,
+              403
+            ],
+            "from": [
+              540,
+              422
+            ],
+            "return_seconds": 5.9,
+            "road_seconds": 2.16,
+            "seconds": 3.5,
+            "snapshot": "screen-03.jpg",
+            "to": [
+              604,
+              401
+            ],
+            "track_id": 1,
+            "trail": [
+              [
+                540,
+                422
+              ],
+              [
+                604,
+                401
+              ],
+              [
+                604,
+                401
+              ],
+              [
+                616,
+                379
+              ],
+              [
+                622,
+                379
+              ],
+              [
+                619,
+                351
+              ],
+              [
+                616,
+                341
+              ],
+              [
+                601,
+                323
+              ],
+              [
+                579,
+                309
+              ],
+              [
+                546,
+                293
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "slug": "clear-control",
+        "job_id": "04fe01c9b43549c4a0a6a8f308c1c9f8",
+        "source_sha256": "b8111f12f9d1c7256e89b9576d9fa5eb88e02ff1359537b9901fb49fc7f4d079",
+        "score": 10,
+        "exits": 0,
+        "near_obstruction": 0,
+        "returns": 0,
+        "road_person_seconds": 0,
+        "obstruction_frames": 0,
+        "seconds_to_analyze": 78.2,
+        "source_video": {
+          "fps": 12.0,
+          "frames": 240
+        },
+        "marked_video": {
+          "fps": 12.0,
+          "frames": 240
+        },
+        "events": []
+      }
+    ]
+  }
+}

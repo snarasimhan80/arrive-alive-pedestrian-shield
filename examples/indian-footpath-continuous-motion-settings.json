@@ -1,0 +1,16 @@
+{
+  "site_name": "Synthetic moving Indian street",
+  "polygon": [[0, 1], [0.43, 0.35], [0.58, 0.27], [0.85, 0.18], [0.995, 0.18], [0.995, 0.995]],
+  "road_polygon": [[0, 0], [0.63, 0], [0.60, 0.18], [0.58, 0.27], [0.43, 0.35], [0, 1]],
+  "width_line": [[0.20, 0.55], [0.93, 0.55]],
+  "flow_line": [[0.70, 0.55], [0.70, 0.95]],
+  "speed_gates": {
+    "a": [[0.27, 0.25], [0.27, 0.75]],
+    "b": [[0.15, 0.25], [0.15, 0.75]],
+    "distance_m": 6
+  },
+  "footpath_width_m": 2.4,
+  "footpath_width_source": "synthetic demo value",
+  "use_clip_flow_for_demo": true,
+  "min_overlap": 0.12
+}

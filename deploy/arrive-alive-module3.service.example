@@ -1,0 +1,34 @@
+# Reference for the existing server. Do not replace an installed unit blindly.
+[Unit]
+Description=Arrive Alive AI footpath demo
+After=network.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+StateDirectory=arrive-alive-module3
+WorkingDirectory=/opt/arrive-alive-module3
+Environment=HOSTED_DEMO=1
+Environment=DEMO_JOBS_DIR=/var/lib/arrive-alive-module3/jobs
+Environment=YOLO_CONFIG_DIR=/var/lib/arrive-alive-module3/ultralytics
+Environment=MPLCONFIGDIR=/var/lib/arrive-alive-module3/matplotlib
+Environment=OMP_NUM_THREADS=1
+Environment=OPENBLAS_NUM_THREADS=1
+Environment=MKL_NUM_THREADS=1
+ExecStart=/opt/arrive-alive-module3/.venv/bin/gunicorn --workers 1 --threads 4 --bind 127.0.0.1:8765 --timeout 120 app:app
+Restart=on-failure
+RestartSec=5
+MemoryMax=1G
+MemorySwapMax=0
+CPUQuota=75%
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+RestrictSUIDSGID=yes
+
+[Install]
+WantedBy=multi-user.target

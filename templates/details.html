@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedestrian Shield | Detailed evidence</title>
+  <link rel="stylesheet" href="static/quick.css?v=detours-20261022">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar"><a class="brand" href="./">ARRIVE ALIVE <span>AI</span></a><a href="./">← Analyze another video</a></header>
+    <main class="detail-main">
+      <p class="eyebrow">MODULE 3 · DETAILED EVIDENCE</p>
+      <h1>What the detector saw</h1>
+      <p id="detail-status" class="status" role="status">Loading analysis…</p>
+      <section id="detail-content" class="hidden">
+        <div class="detail-score"><div><p class="eyebrow">VISUAL SCREENING SCORE</p><h2 id="detail-label"></h2><p id="detail-intro"></p></div><strong id="detail-score"></strong></div>
+        <div id="metrics" class="metric-grid"></div>
+        <section class="detail-section"><h2>Marked video</h2><p>Green shows the saved footpath and detected people. Orange marks possible obstructions. A tracked pedestrian stays red while in the road, with a red trail showing the detour. Playback keeps the source frame rate; detections refresh on sampled frames.</p><video id="marked-video" controls playsinline class="marked-video hidden"></video><img id="marked-photo" class="marked-video hidden" alt="Marked image sample"></section>
+        <section id="movement-section" class="detail-section hidden"><h2>Tracked movement into the road</h2><p>Each event is a person track crossing the saved boundary. A nearby blocker does not establish why the person moved.</p><div id="movement-events"></div></section>
+        <section class="detail-section"><h2>Frames to review</h2><div id="snapshots" class="snapshot-grid"></div></section>
+        <section class="detail-section"><h2>How the score was made</h2><p id="method"></p><p>The score is a visual demo index. It does not measure vehicle speed or predict an accident.</p></section>
+        <section class="detail-section detail-note"><h2>For the proposal’s full exposure index</h2><p>A site survey or configured fixed camera must supply the footpath boundary, path width, peak pedestrian flow and traffic speed. Only then can the FR-23 displaced-person estimate and FR-24 speed-weighted exposure be calculated. <a href="analyze">Open the detailed site setup →</a></p></section>
+        <section class="detail-section"><h2>Limits of this run</h2><ul id="limits"></ul></section>
+      </section>
+      <p class="detail-links"><a href="proposal">Original proposal and illustrative site table →</a></p>
+    </main>
+    <footer>Model output needs human review. This is not a crash or mortality prediction.{% if hosted %} <a href="source.zip">AGPL source</a>{% endif %}</footer>
+  </div>
+  <script src="static/details.js?v=detours-20261022" defer></script>
+</body>
+</html>

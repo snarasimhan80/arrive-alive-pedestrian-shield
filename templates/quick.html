@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedestrian Shield | Video demo</title>
+  <link rel="stylesheet" href="static/quick.css?v=detours-20261022">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar"><a class="brand" href="./">ARRIVE ALIVE <span>AI</span></a><a href="proposal">View full proposal →</a></header>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">MODULE 3 · PEDESTRIAN SHIELD</p>
+        <h1>Blocked footpath.<br><em>Watch the detour.</em></h1>
+        <p class="intro">Try a generated Indian street video, or upload your own. The demo follows walkers into the road, marks them red, and calculates a concern score.</p>
+        <form id="upload-form" class="upload-card">
+          <label class="file-button" for="source-file">Choose a video or photo <span>↗</span></label>
+          <input id="source-file" type="file" accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,image/jpeg,image/png,.mp4,.mov,.avi,.mkv,.jpg,.jpeg,.png">
+          <span class="upload-hint">Analysis begins when you choose a file. Up to {{ max_video_seconds }} seconds and {{ max_upload_mb }} MB.</span>
+        </form>
+        <p id="status" class="status" role="status">Choose your clip or try an example below. Other camera views need a one-time path marking to measure crossings.</p>
+        <a class="sample-shortcut" href="#samples-heading">Try one of the four examples ↓</a>
+        <div id="progress" class="progress hidden"><div id="progress-fill"></div></div>
+      </section>
+
+      <section id="result" class="result hidden" aria-live="polite">
+        <div><p class="eyebrow">TRACKED PATH-TO-ROAD MOVEMENT</p><h2 id="result-label">Result</h2><p id="result-explanation"></p><strong id="crossing-count" class="crossing-count"></strong><div id="event-links" class="event-links"></div><a id="details-link" class="dark-link" href="details">View detailed evidence <span>→</span></a></div>
+        <div id="score-tile" class="score-tile"><strong id="score">—</strong><span>/ 100<br>visual concern</span></div>
+      </section>
+
+      <section id="result-preview" class="result-preview hidden"><h2>Watch the marked result</h2><p>Green shows the saved footpath. Red marks a tracked crossing into the road. Select a timestamp above to jump to it.</p><video id="result-video" controls playsinline muted></video></section>
+
+      <section class="samples" aria-labelledby="samples-heading">
+        <div class="section-heading"><div><p class="eyebrow">TRY IT IN ONE CLICK</p><h2 id="samples-heading">Four obstruction scenarios</h2></div><p>Generated scenes show the complete route: approach an obstruction, step into the road, and return to the footpath. Each example has a saved camera marking.</p></div>
+        <div class="sample-grid">
+          {% for item in scenarios %}
+          <article class="sample-card">
+            <video src="samples/{{ item.slug }}.mp4" {% if item.poster %}poster="samples/{{ item.slug }}.jpg"{% endif %} controls muted playsinline preload="metadata" aria-label="{{ item.title }} sample video"></video>
+            <div class="sample-copy"><div><p class="eyebrow">{{ 'GENERATED DEMO FOOTAGE' if item.footage_type == 'generated' else 'STREET FOOTAGE' }}</p><h3>{{ '%02d'|format(loop.index) }} · {{ item.title }}</h3><p>{{ item.description }}</p>{% if item.source_url %}<p class="sample-credit"><a href="{{ item.source_url }}" target="_blank" rel="noopener noreferrer">Footage: {{ item.source_credit }} ↗</a></p>{% endif %}</div><button type="button" data-sample="{{ item.slug }}">Analyze this video</button><a href="samples/{{ item.slug }}.mp4" download="{{ item.slug }}.mp4">Download MP4 ↓</a></div>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+    </main>
+    <footer><p>The examples are generated simulations. Scores use detected obstructions, tracked crossings and time in the road; the detailed page shows the calculation. Site exposure under FR-24 additionally needs path width, pedestrian flow and traffic speed. <a href="analyze">Mark a different fixed camera</a>{% if hosted %} · <a href="source.zip">AGPL source</a>{% endif %}</p><p>{% if hosted %}Uploaded files on this public demo expire after {{ job_ttl_hours }} hours on a later request. Anyone with a result link can view its output.{% else %}Your files stay on this computer.{% endif %}</p></footer>
+  </div>
+  <script src="static/quick.js?v=detours-20261022" defer></script>
+</body>
+</html>

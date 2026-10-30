@@ -1,0 +1,1152 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Arrive Alive AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  /* Committed single-theme design: a printed road-safety audit, meant to be
+     projected in a meeting room and printed as a leave-behind. All colours
+     painted explicitly so the page holds on any host ground. */
+  --paper:#F7F5F0;
+  --surface:#FFFFFF;
+  --surface-2:#FBFAF7;
+  --ink:#16211D;
+  --ink-2:#47544E;
+  --ink-3:#7C867F;
+  --rule:#E3DFD6;
+  --rule-strong:#CEC8BA;
+
+  --accent:#0B6E4F;
+  --accent-deep:#05432F;
+  --accent-wash:#E9F1EC;
+
+  /* Sequential ramp — risk magnitude, one hue, light to dark */
+  --r1:#FBE7DA; --r2:#F4C5A3; --r3:#E79669; --r4:#D3653B; --r5:#A73B19; --r6:#74210B;
+
+  /* Categorical — crash causation. Validated: lightness band, chroma floor,
+     normal-vision floor and contrast all pass; worst CVD adjacent pair 7.7
+     deutan, carried with direct labels + 2px gaps as secondary encoding. */
+  --c-fatigue:#1D4ED8;
+  --c-negligent:#D97706;
+  --c-speed:#0D9488;
+  --c-tyre:#BE185D;
+  --c-other:#8A8781;
+
+  --critical:#B3261E;
+  --warning:#A75E00;
+
+  --sp:clamp(16px,3.2vw,26px);
+  --maxw:1080px;
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Public Sans','Helvetica Neue',Arial,sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.page{max-width:var(--maxw);margin:0 auto;padding-inline:var(--sp);padding-block:0 72px;}
+
+h1,h2,h3,h4{font-family:'Archivo','Helvetica Neue',Arial,sans-serif;text-wrap:balance;margin:0;line-height:1.15;}
+p{margin:0;}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent);font-weight:500;
+}
+
+/* ---------- masthead ---------- */
+.mast{
+  border-bottom:2px solid var(--ink);
+  padding-block:22px 14px;
+  display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;
+}
+.mast-id{display:flex;align-items:center;gap:13px;}
+.shield{
+  width:42px;height:46px;flex:none;
+  background:var(--accent-deep);
+  clip-path:polygon(0 0,100% 0,100% 68%,50% 100%,0 68%);
+  display:flex;align-items:flex-start;justify-content:center;padding-top:7px;
+}
+.shield span{font-family:'Archivo';font-weight:700;font-size:15px;color:#FFF;letter-spacing:.02em;}
+.mast h1{font-size:clamp(25px,4.4vw,34px);font-weight:700;letter-spacing:-.015em;}
+.mast .kicker{font-size:12.5px;color:var(--ink-2);margin-top:3px;}
+.provenance{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.5;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--ink-2);text-align:right;
+  border-left:3px solid var(--warning);padding-left:11px;
+}
+.provenance b{color:var(--warning);font-weight:500;}
+
+/* ---------- lede ---------- */
+.lede{padding-block:30px 4px;display:grid;grid-template-columns:1.35fr 1fr;gap:34px;align-items:start;}
+.lede h2{font-size:clamp(20px,3vw,26px);font-weight:600;letter-spacing:-.01em;max-width:20ch;}
+.lede p{font-size:15.5px;color:var(--ink-2);margin-top:12px;max-width:62ch;}
+.module3-jump{display:inline-block;margin-top:15px;padding:9px 13px;background:var(--accent-deep);color:#fff;font:600 13px 'Public Sans',sans-serif;text-decoration:none;}
+.module3-jump:hover,.module3-jump:focus-visible{background:var(--accent);color:#fff;}
+.quote{
+  border-left:3px solid var(--accent);padding:2px 0 2px 15px;
+  font-size:15px;line-height:1.55;
+}
+.quote i{font-style:italic;color:var(--ink);}
+.quote cite{display:block;font-style:normal;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-3);margin-top:8px;font-family:'IBM Plex Mono',monospace;}
+
+/* ---------- facts strip ---------- */
+.facts{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+  background:var(--rule);border:1px solid var(--rule);margin-top:26px;
+}
+.fact{background:var(--surface);padding:15px 16px 14px;}
+.fact .n{font-family:'Archivo';font-weight:700;font-size:27px;letter-spacing:-.02em;line-height:1;}
+.fact .l{font-size:12px;color:var(--ink-2);margin-top:7px;line-height:1.4;}
+.fact .s{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-3);margin-top:6px;}
+
+/* ---------- section shell ---------- */
+section{margin-top:48px;}
+.sec-head{border-top:2px solid var(--ink);padding-top:13px;margin-bottom:20px;}
+.sec-head .row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap;}
+.sec-head h3{font-size:22px;font-weight:600;letter-spacing:-.01em;margin-top:5px;}
+.sec-head p{font-size:14px;color:var(--ink-2);margin-top:8px;max-width:66ch;}
+.tag{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 8px;border:1px solid var(--rule-strong);color:var(--ink-2);white-space:nowrap;
+}
+
+/* ---------- console controls ---------- */
+.console{
+  background:var(--accent-deep);color:#EFF3F0;
+  padding:18px var(--sp) 20px;margin-inline:calc(var(--sp) * -1);
+  position:sticky;top:0;z-index:20;
+}
+.console-in{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:22px;align-items:center;}
+.scrub label{
+  display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:#9DBCAE;margin-bottom:7px;
+}
+.scrub .clock{font-family:'Archivo';font-weight:700;font-size:21px;color:#FFF;letter-spacing:.01em;}
+input[type=range]{
+  width:100%;appearance:none;height:4px;background:#2D6551;border-radius:0;outline:none;cursor:pointer;margin:0;
+}
+input[type=range]::-webkit-slider-thumb{
+  appearance:none;width:15px;height:22px;background:#FFF;border:none;cursor:pointer;border-radius:1px;
+}
+input[type=range]::-moz-range-thumb{width:15px;height:22px;background:#FFF;border:none;border-radius:1px;cursor:pointer;}
+input[type=range]:focus-visible{outline:2px solid #F4C5A3;outline-offset:4px;}
+.ticks{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;color:#7FA394;margin-top:5px;letter-spacing:.05em;}
+.conds{display:flex;gap:0;border:1px solid #2D6551;}
+.conds button{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;
+  background:transparent;color:#9DBCAE;border:none;padding:9px 13px;cursor:pointer;white-space:nowrap;
+  transition:background .15s ease,color .15s ease;
+}
+.conds button + button{border-left:1px solid #2D6551;}
+.conds button[aria-pressed=true]{background:#FFF;color:var(--accent-deep);font-weight:500;}
+.conds button:hover:not([aria-pressed=true]){background:#2D6551;color:#FFF;}
+.conds button:focus-visible{outline:2px solid #F4C5A3;outline-offset:2px;}
+
+/* ---------- panels ---------- */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.split-wide{grid-template-columns:1.25fr 1fr;}
+.panel{background:var(--surface);border:1px solid var(--rule);}
+.panel-h{
+  padding:11px 15px;border-bottom:1px solid var(--rule);background:var(--surface-2);
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-2);
+}
+.panel-b{padding:16px 15px;}
+
+/* stacked causation bar */
+.stack{display:flex;gap:2px;height:52px;margin-bottom:12px;}
+.seg{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  transition:flex-grow .45s cubic-bezier(.4,0,.2,1);overflow:hidden;
+}
+.seg span{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;color:#FFF;
+  white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.35);
+}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;}
+.lg{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);}
+.lg i{width:11px;height:11px;flex:none;display:block;}
+.lg b{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-weight:500;color:var(--ink);font-size:12px;}
+
+/* exit ranking */
+.rank{display:flex;flex-direction:column;}
+.rk{
+  display:grid;grid-template-columns:26px 1fr 54px;gap:11px;align-items:center;
+  padding:9px 0;border-bottom:1px solid var(--rule);
+}
+.rk:last-child{border-bottom:none;}
+.rk .ex{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-3);}
+.rk .nm{font-size:13.5px;font-weight:500;line-height:1.3;}
+.rk .ty{font-size:11px;color:var(--ink-3);margin-top:1px;}
+.rk .bar{height:7px;margin-top:5px;transition:width .4s ease;}
+.rk .vl{font-family:'IBM Plex Mono',monospace;font-size:12px;text-align:right;font-variant-numeric:tabular-nums;}
+.rk .vl small{display:block;font-size:9.5px;color:var(--ink-3);letter-spacing:.03em;}
+
+/* driver message */
+.handset{
+  background:#101613;padding:13px;max-width:300px;margin:0 auto;
+}
+.msg{background:#1E2A24;border-left:3px solid var(--accent);padding:12px 13px;}
+.msg .from{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:#6E9686;margin-bottom:7px;}
+.msg .txt{font-size:13px;line-height:1.55;color:#E6EDE9;}
+.msg .txt b{color:#FFF;font-weight:600;}
+.msg .tm{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5E7F71;margin-top:9px;}
+
+/* roster */
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);text-align:left;font-weight:500;padding:0 10px 8px 0;border-bottom:1px solid var(--rule-strong);
+}
+td{padding:10px 10px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+td.num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;text-align:right;padding-right:0;}
+th.num{text-align:right;padding-right:0;}
+.asset{
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 7px;white-space:nowrap;border:1px solid;
+}
+.asset.bike{color:#0F3E77;border-color:#9CB9DC;background:#EAF0F8;}
+.asset.marshal{color:#7A3C00;border-color:#E0BC8C;background:#FBF2E6;}
+.tbl-wrap{overflow-x:auto;}
+
+.alloc{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px;}
+.alloc .fld{flex:1 1 170px;min-width:150px;}
+.alloc .fld label{
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:8px;
+}
+.alloc .fld label b{font-family:'Archivo';font-size:16px;color:var(--ink);letter-spacing:0;}
+.alloc input[type=range]{background:var(--rule-strong);}
+.alloc input[type=range]::-webkit-slider-thumb{background:var(--accent);}
+.alloc input[type=range]::-moz-range-thumb{background:var(--accent);}
+.alloc input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:4px;}
+
+.readout{
+  background:var(--accent-wash);border:1px solid #C6DCD0;padding:13px 15px;
+  display:flex;gap:26px;flex-wrap:wrap;
+}
+.readout div{flex:1 1 130px;}
+.readout .n{font-family:'Archivo';font-weight:700;font-size:23px;color:var(--accent-deep);line-height:1;}
+.readout .l{font-size:11.5px;color:var(--ink-2);margin-top:5px;line-height:1.35;}
+
+/* pedestrian */
+.pipe{display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:start;}
+.pipe img{width:190px;display:block;border:1px solid var(--rule);}
+.split-pipe{grid-template-columns:1.55fr 1fr;}
+.pipe ol{margin:0;padding-left:17px;font-size:13px;color:var(--ink-2);line-height:1.55;}
+.pipe ol li{margin-bottom:9px;}
+.pipe ol li b{color:var(--ink);font-weight:600;}
+.pipe ol li:last-child{margin-bottom:0;}
+
+.steps-list{margin:0;padding-left:18px;font-size:13.5px;line-height:1.6;color:var(--ink-2);}
+.steps-list li{margin-bottom:10px;}
+.steps-list li:last-child{margin-bottom:0;}
+.steps-list li b{color:var(--ink);font-weight:600;}
+.route{display:flex;flex-direction:column;}
+.route-row{display:grid;grid-template-columns:1fr 1.2fr;gap:14px;padding:10px 0;border-bottom:1px solid var(--rule);font-size:13px;}
+.route-row:last-child{border-bottom:none;}
+.route-k{font-weight:500;color:var(--ink);}
+.route-v{color:var(--ink-2);}
+
+figure{margin:0;}
+figcaption{font-size:11.5px;color:var(--ink-3);margin-top:8px;line-height:1.5;}
+
+/* real vs modelled */
+.audit{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule-strong);}
+.audit > div{padding:17px 18px;}
+.audit > div:first-child{border-right:1px solid var(--rule-strong);background:var(--surface);}
+.audit > div:last-child{background:#FDF8F2;}
+.audit h4{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;font-weight:500;margin-bottom:11px;}
+.audit ul{margin:0;padding-left:16px;font-size:13px;line-height:1.6;color:var(--ink-2);}
+.audit li{margin-bottom:7px;}
+.audit li:last-child{margin-bottom:0;}
+.audit li b{color:var(--ink);font-weight:600;}
+
+/* asks */
+.asks{counter-reset:ask;display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);}
+.ask{background:var(--surface);padding:16px 18px;display:grid;grid-template-columns:auto 1fr;gap:15px;align-items:start;}
+.ask::before{
+  counter-increment:ask;content:counter(ask);
+  font-family:'Archivo';font-weight:700;font-size:15px;color:#FFF;background:var(--accent);
+  width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex:none;
+}
+.ask h4{font-size:15px;font-weight:600;margin-bottom:5px;}
+.ask p{font-size:13.5px;color:var(--ink-2);line-height:1.55;}
+
+.note{font-size:12.5px;color:var(--ink-2);line-height:1.65;border-left:2px solid var(--rule-strong);
+  padding-left:14px;margin-top:18px;}
+.note b{color:var(--ink);}
+
+footer{margin-top:52px;border-top:2px solid var(--ink);padding-top:16px;}
+footer h4{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3);font-weight:500;margin-bottom:10px;}
+footer ol{margin:0;padding-left:18px;font-size:12px;color:var(--ink-2);line-height:1.7;}
+footer a{color:var(--accent);text-decoration:none;border-bottom:1px solid #B9D3C6;}
+footer a:hover{border-bottom-color:var(--accent);}
+footer a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+@media (max-width:860px){
+  .lede{grid-template-columns:1fr;gap:22px;}
+  .facts{grid-template-columns:1fr 1fr;}
+  .split,.split-wide,.split-pipe{grid-template-columns:1fr;}
+  .audit{grid-template-columns:1fr;}
+  .audit > div:first-child{border-right:none;border-bottom:1px solid var(--rule-strong);}
+  .console-in{grid-template-columns:1fr;gap:15px;}
+  .conds{overflow-x:auto;}
+  .pipe{grid-template-columns:1fr;}
+  .pipe img{width:100%;max-width:230px;}
+  .provenance{text-align:left;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;animation:none !important;}
+}
+.module3-demo{margin-top:20px;}
+.module3-demo .panel-b{padding:0;}
+.module3-demo-intro{padding:17px 18px 0;color:var(--ink-2);font-size:13px;}
+#module3-video-frame{display:block;width:100%;min-height:320px;border:0;background:var(--paper);}
+.module3-table-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:15px;}
+.module3-table-actions button{font:600 12px 'Public Sans',sans-serif;color:var(--accent-deep);background:var(--accent-wash);border:1px solid #B9D3C6;padding:8px 11px;cursor:pointer;}
+.module3-table-actions button[aria-pressed=true]{background:var(--accent-deep);color:white;}
+.module3-table-actions button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.module3-row-note{font-size:11px;color:var(--ink-3);line-height:1.4;}
+.module3-score{display:inline-block;padding:2px 7px;font-family:'IBM Plex Mono',monospace;font-weight:600;}
+#module3-site-table{scroll-margin-top:140px;}
+</style>
+
+<div class="console">
+  <div class="console-in">
+    <div class="scrub">
+      <label for="hour">
+        <span>Time of day — ORR &amp; city risk window</span>
+        <span class="clock" id="clock">03:00</span>
+      </label>
+      <input type="range" id="hour" min="0" max="23" step="1" value="3" aria-describedby="clock">
+      <div class="ticks"><span>00</span><span>06</span><span>12</span><span>18</span><span>23</span></div>
+    </div>
+    <div class="conds" role="group" aria-label="Road conditions">
+      <button type="button" id="c-dry" data-c="dry" aria-pressed="true">Dry</button>
+      <button type="button" id="c-heat" data-c="heat" aria-pressed="false">Summer heat</button>
+      <button type="button" id="c-wet" data-c="wet" aria-pressed="false">Monsoon</button>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="mast">
+    <div class="mast-id">
+      <div class="shield"><span>AA</span></div>
+      <div>
+        <h1>Arrive Alive AI</h1>
+        <div class="kicker">Preventive road-safety console — pilot proposal for Hyderabad City Police under TG-TMARS</div>
+      </div>
+    </div>
+    <div class="provenance">
+      <b>Modelled projection</b><br>
+      Not connected to live feeds<br>
+      Modules 1–2: published figures<br>
+      Module 3: uploaded video
+    </div>
+  </div>
+
+  <div class="lede">
+    <div>
+      <div class="eyebrow">The proposition</div>
+      <h2>Published figures guide patrol planning. Uploaded video tests pedestrian exposure.</h2>
+      <p>This is not a violation detector. Hyderabad already buys those. This takes the crash-causation breakdown from your own Outer Ring Road review, distributes it across the hours of the day and the 19 ORR exits, and returns the one thing a causation table cannot give you on its own: where to stand your existing patrol assets tonight, and what to say to the driver before the crash rather than after it.</p>
+      <p style="margin-top:12px">Move the clock above. Everything on the page recalculates.</p>
+      <a class="module3-jump" href="#module3">Go to the Module 3 video demo ↓</a>
+    </div>
+    <div class="quote">
+      <i>“Preventive measures can save lives rather than reacting after accidents.”</i>
+      <cite>V.C. Sajjanar, Commissioner of Police, Hyderabad — ORR road-safety review</cite>
+      <div style="margin-top:18px;border-top:1px solid var(--rule);padding-top:14px">
+        <i>“Technology should not be limited to detecting traffic violations.”</i>
+        <cite>Sanjay Jaju, Chief Secretary — TG-TMARS review</cite>
+      </div>
+    </div>
+  </div>
+
+  <div class="facts">
+    <div class="fact">
+      <div class="n">2.80<span style="font-size:15px;font-weight:600"> lakh</span></div>
+      <div class="l">Vehicles on the ORR each day</div>
+      <div class="s">CP review</div>
+    </div>
+    <div class="fact">
+      <div class="n" style="color:var(--critical)">5–6</div>
+      <div class="l">Crashes on the ORR every day</div>
+      <div class="s">CP review</div>
+    </div>
+    <div class="fact">
+      <div class="n" style="color:var(--critical)">42<span style="font-size:15px;font-weight:600">%</span></div>
+      <div class="l">Of city road victims are pedestrians</div>
+      <div class="s">City police data</div>
+    </div>
+    <div class="fact">
+      <div class="n">19</div>
+      <div class="l">ORR exits across 158 km, eight lanes</div>
+      <div class="s">HMDA / ORR</div>
+    </div>
+  </div>
+
+  <!-- ============ MODULE 1 ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="row">
+        <div class="eyebrow">Module one</div>
+        <span class="tag">Drives the roster below</span>
+      </div>
+      <h3>ORR Zero — what is actually killing people at this hour</h3>
+      <p>Your four-month ORR causation review found drowsiness 33%, negligent driving 25%, overspeeding 15%, tyre bursts 14%. Those shares are an annual average. They are not what is happening at three in the morning. Each cause has its own clock, and the intervention that works changes with it.</p>
+    </div>
+
+    <div class="split split-wide">
+      <div class="panel">
+        <div class="panel-h"><span>Crash causation — selected hour</span><span id="cause-hour">03:00</span></div>
+        <div class="panel-b">
+          <div class="stack" id="stack" role="img" aria-label="Crash causation shares for the selected hour"></div>
+          <div class="legend" id="legend"></div>
+          <p class="note" style="margin-top:16px;font-size:12px">
+            <b>Read the shift.</b> <span id="shift-note"></span>
+          </p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h"><span>Entry-gate message</span><span>Auto-drafted</span></div>
+        <div class="panel-b">
+          <div class="handset">
+            <div class="msg">
+              <div class="from">Hyderabad Traffic Police</div>
+              <div class="txt" id="sms"></div>
+              <div class="tm" id="sms-time">03:00 · on entry</div>
+            </div>
+          </div>
+          <p class="note" style="margin-top:14px;font-size:12px">
+            You asked for safety messages to reach drivers as they enter the ORR. This is that message, written to the risk that is actually live at that hour — not a generic reminder. It goes out on FASTag entry read, so it needs no new hardware.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:20px">
+      <div class="panel-h">
+        <span>Expected crash load by exit — selected hour</span>
+        <span id="rank-total"></span>
+      </div>
+      <div class="panel-b">
+        <div class="rank" id="rank"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MODULE 2 ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="row">
+        <div class="eyebrow">Module two</div>
+        <span class="tag">Uses assets you already own</span>
+      </div>
+      <h3>Tonight's deployment — no procurement required</h3>
+      <p>You have 30 traffic patrol bikes, funded by 45 corporate sponsors, and you have authorised traffic marshals. The allocator places them against the causes that are live in the selected window, because a patrol bike suppresses speeding and negligent driving well and does almost nothing about a fatigued lorry driver — that needs a marshal and a rest prompt at the entry gantry. Set the numbers you can actually spare.</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-b">
+        <div class="alloc">
+          <div class="fld">
+            <label for="bikes"><span>Patrol bikes on this shift</span><b id="bikes-n">12</b></label>
+            <input type="range" id="bikes" min="0" max="30" step="1" value="12">
+          </div>
+          <div class="fld">
+            <label for="marshals"><span>Marshals / advisory points</span><b id="marshals-n">8</b></label>
+            <input type="range" id="marshals" min="0" max="20" step="1" value="8">
+          </div>
+        </div>
+
+        <div class="readout">
+          <div><div class="n" id="ro-averted">—</div><div class="l">Crashes avoided per six-hour shift, <span id="shift-lbl">00:00–06:00</span></div></div>
+          <div><div class="n" id="ro-year">—</div><div class="l">Per year if this shift is held every day</div></div>
+          <div><div class="n" id="ro-cover">—</div><div class="l">Share of the shift's ORR crash load suppressed</div></div>
+          <div><div class="n" id="ro-lead">—</div><div class="l">Highest-value single placement</div></div>
+        </div>
+
+        <div class="tbl-wrap" style="margin-top:18px">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:34px">#</th>
+                <th>Placement</th>
+                <th>Asset</th>
+                <th>Live risk being suppressed</th>
+                <th class="num">Averted<br>/shift</th>
+              </tr>
+            </thead>
+            <tbody id="roster"></tbody>
+          </table>
+        </div>
+        <p class="note" style="font-size:12px">
+          <b>How the arithmetic works.</b> Each placement's effect is its share of this hour's modelled crash load multiplied by an assumed suppression rate for that asset against that cause, with diminishing returns on the second and third unit at the same location. Every one of those rates is a stated assumption, listed in the audit panel below, and every one of them is replaceable with a measured value from the pilot's own data. Nothing here is a black box.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MODULE 3 ============ -->
+  <section id="module3">
+    <div class="sec-head">
+      <div class="row">
+        <div class="eyebrow">Module three</div>
+        <span class="tag">Same engine, second problem</span>
+      </div>
+      <h3>Pedestrian Shield — why blocked footpaths are a police number</h3>
+      <p>Footpath encroachment is usually handed to the municipal corporation as a nuisance. That framing is why it never gets fixed. Pedestrians are 42% of this city's road victims — 121 of 287 deaths in the year last reported. A blocked footpath is the mechanism that puts them in the carriageway. Measured that way it stops being GHMC's housekeeping and becomes the largest single category in your own fatality register.</p>
+    </div>
+
+    <div class="split split-pipe">
+      <div class="panel">
+        <div class="panel-h"><span>Detection pipeline</span><span>YOLOv8n-seg · human review</span></div>
+        <div class="panel-b">
+          <div class="pipe">
+            <figure>
+              <img src="static/detection-sample.jpg" alt="Sample street frame with detected objects and a mapped footpath zone">
+              <figcaption>Sample model output, not Hyderabad CCTV. Upload a clip below for a new analysis.</figcaption>
+            </figure>
+            <ol>
+              <li><b>Map the footpath once</b> per camera as a fixed polygon. A one-time five-minute task per pole.</li>
+              <li><b>Detect and measure overlap</b> — the model flags visible vehicle overlap with the marked footpath. It also labels people; a cross-section provides a provisional width-lost estimate. An officer checks each flag.</li>
+              <li><b>Estimate displacement</b> — width lost and pedestrian flow produce a planning estimate. Short visual tracks can also flag possible footpath-to-road movements for review; neither proves why a person entered the road.</li>
+              <li><b>Route to whoever can clear it</b> — a GHMC work order, not a challan, is the proposed pilot workflow. Automatic work-order routing is not part of this demo.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h"><span>Footpath cross-section</span><span>Exposure mechanism</span></div>
+        <div class="panel-b">
+          <svg viewBox="0 0 340 186" width="100%" height="auto" role="img" aria-label="Cross-section showing an obstructed footpath forcing pedestrians into the carriageway">
+            <rect x="0" y="0" width="340" height="186" fill="#FBFAF7"></rect>
+            <rect x="0" y="24" width="92" height="118" fill="#E3DFD6"></rect>
+            <text x="8" y="44" font-family="IBM Plex Mono, monospace" font-size="9" fill="#7C867F">BUILDING LINE</text>
+            <rect x="92" y="24" width="76" height="118" fill="#EDEAE2"></rect>
+            <rect x="130" y="24" width="38" height="118" fill="#F4C5A3"></rect>
+            <rect x="130" y="24" width="38" height="118" fill="none" stroke="#A73B19" stroke-width="1.5" stroke-dasharray="4 3"></rect>
+            <text x="98" y="160" font-family="IBM Plex Mono, monospace" font-size="9" fill="#47544E">FOOTPATH 2.4 m</text>
+            <text x="134" y="176" font-family="IBM Plex Mono, monospace" font-size="9" fill="#A73B19">BLOCKED 1.2 m</text>
+            <rect x="168" y="24" width="5" height="118" fill="#CEC8BA"></rect>
+            <rect x="173" y="24" width="167" height="118" fill="#16211D"></rect>
+            <rect x="173" y="80" width="167" height="2" fill="#F7F5F0" opacity="0.55"></rect>
+            <text x="246" y="160" font-family="IBM Plex Mono, monospace" font-size="9" fill="#47544E">CARRIAGEWAY</text>
+            <circle cx="110" cy="70" r="6" fill="#0B6E4F"></circle>
+            <circle cx="110" cy="100" r="6" fill="#0B6E4F"></circle>
+            <circle cx="190" cy="58" r="6" fill="#B3261E"></circle>
+            <circle cx="192" cy="112" r="6" fill="#B3261E"></circle>
+            <path d="M148 86 L186 86" stroke="#B3261E" stroke-width="1.5" marker-end="url(#ar)"></path>
+            <defs><marker id="ar" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 Z" fill="#B3261E"></path></marker></defs>
+            <text x="8" y="16" font-family="IBM Plex Mono, monospace" font-size="9" fill="#B3261E">RED = PEDESTRIAN IN LIVE TRAFFIC</text>
+          </svg>
+          <p class="note" style="font-size:12px;margin-top:14px">
+            The proposed metric estimates how many pedestrians could be affected by lost walking width, then weights that estimate by traffic speed. It is a relative exposure index, not a measured crash probability or a count of people forced into traffic.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:20px">
+      <div class="panel-h">
+        <span>Candidate pilot sites ranked by pedestrian exposure</span>
+        <span>Illustrative — replaced by your 65-location list on day one</span>
+      </div>
+      <div class="panel-b">
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Site</th>
+                <th class="num">Peak peds/hr</th>
+                <th class="num">Width lost</th>
+                <th class="num">Displaced<br>into traffic</th>
+                <th class="num">Exposure<br>index</th>
+              </tr>
+            </thead>
+            <tbody id="ped-rows"></tbody>
+          </table>
+        </div>
+        <p class="note" style="font-size:12px">
+          <b>These ten sites are stand-ins, and they are labelled as such deliberately.</b> Your Road Accident Analysis Group has already identified 65 accident-prone locations. The pilot ranks your list, not ours — this table exists to show the shape of the output and the units it reports in, so you can tell in advance whether the answer would be useful to you.
+        </p>
+      </div>
+    </div>
+
+    <div class="panel module3-demo">
+      <div class="panel-h"><span>Analyze a site video</span><span>Upload · detect · review · rank</span></div>
+      <div class="panel-b">
+        <p class="module3-demo-intro">Upload a short fixed-camera clip. Name the location, mark its footpath and road, then analyze. Your result appears in a separate table below; the ten proposal examples above stay visible and unchanged. The supplied moving clip and its measurements are synthetic.</p>
+        <iframe id="module3-video-frame" title="Module 3 video analysis" src="analyze?embedded=1" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div id="module3-site-table" class="panel" style="margin-top:20px">
+      <div class="panel-h">
+        <span>Uploaded video sites ranked by pedestrian exposure</span>
+        <span id="analyzed-ped-count">No uploads analyzed yet</span>
+      </div>
+      <div class="panel-b">
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Site</th>
+                <th class="num">Peak peds/hr</th>
+                <th class="num">Width lost</th>
+                <th class="num">Potentially<br>displaced / h</th>
+                <th class="num">Exposure<br>index</th>
+              </tr>
+            </thead>
+            <tbody id="analyzed-ped-rows"></tbody>
+          </table>
+        </div>
+        <div class="module3-table-actions">
+          <button id="copy-ped-link" type="button" hidden>Copy analyzed table link</button>
+        </div>
+        <p id="analyzed-ped-note" class="note" style="font-size:12px" role="status">No analyzed video sites yet. Upload a clip above to add one here. The original ten illustrative sites remain in their own table.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MODULE 4 ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="row">
+        <div class="eyebrow">Module four</div>
+        <span class="tag">Closes the loop between two and three</span>
+      </div>
+      <h3>Every patrol shift is a survey</h3>
+      <p>The bikes the allocator sends out are also the cheapest survey fleet the city will ever own. A phone on the handlebar mount, capturing a frame every few metres, turns each patrol route into a continuous record of footpath, kerb and road-surface condition — with no server, no cloud account and no data leaving the device until an officer chooses to send it.</p>
+    </div>
+
+    <div class="split">
+      <div class="panel">
+        <div class="panel-h"><span>What the patrol phone does</span><span>On-device · no server</span></div>
+        <div class="panel-b">
+          <ol class="steps-list">
+            <li><b>Patrol mode.</b> Capture a frame every few metres while the bike is moving. Night frames are brightness-corrected on the phone automatically, so the fatigue window is covered as well as daylight.</li>
+            <li><b>Local pre-filter first.</b> The same YOLOv8n detector from module three screens every frame on the phone in about a tenth of a second. Only frames that show an obstruction, a pothole or a stationary vehicle go any further — so a full night shift costs a few dozen model calls, not thousands.</li>
+            <li><b>Verify and describe.</b> Flagged frames get a second, richer read: what the obstruction is, how much walking width it takes, whether it is a safety hazard or a nuisance.</li>
+            <li><b>Deduplicate.</b> Anything already recorded a few metres away in the last day is merged, so a stall that is there every morning is one record with a history, not thirty.</li>
+            <li><b>Draft, never send.</b> The phone drafts the report in English or Telugu. The officer reads it and sends it. Nothing goes out automatically.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-h"><span>Where each finding goes</span><span>Jurisdiction routing</span></div>
+        <div class="panel-b">
+          <div class="route">
+            <div class="route-row"><span class="route-k">Footpath obstruction, city road</span><span class="route-v">GHMC zonal commissioner for that ward</span></div>
+            <div class="route-row"><span class="route-k">Pothole or surface failure</span><span class="route-v">GHMC or R&amp;B engineering, by ward and chainage</span></div>
+            <div class="route-row"><span class="route-k">Stationary vehicle on ORR carriageway</span><span class="route-v">HGCL / IRB control room and the nearest patrol — the Exit-14 crash type</span></div>
+            <div class="route-row"><span class="route-k">Missing signage, broken barrier, dark stretch</span><span class="route-v">NHAI or HGCL by chainage</span></div>
+            <div class="route-row"><span class="route-k">Anything outside GHMC or ORR limits</span><span class="route-v">Recorded and held; not routed</span></div>
+          </div>
+          <p class="note" style="font-size:12px;margin-top:14px">
+            <b>Every finding leaves with an owner attached.</b> A report that lands with the right zonal officer, at the right chainage, with a photograph and a timestamp, gets acted on. A report that lands in a general inbox does not. The routing table is the difference between a survey and a backlog, and it is maintained by the pilot's nodal officer, not by us.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <p class="note">
+      <b>Why this matters to the pilot.</b> It answers the question you will ask about module three — "where does the footage come from?" — without a single new camera: the bikes module two already deploys are the sensors. It keeps every image on a department phone until an officer decides otherwise, so there is no data-protection question to clear before starting. And it means the pilot generates its own training data: every frame an officer confirms or rejects improves the local model, so the system is measurably better at week ten than at week one — which is the self-improving loop this whole proposal rests on.
+    </p>
+  </section>
+
+  <!-- ============ AUDIT ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="row"><div class="eyebrow">Before you ask</div></div>
+      <h3>What is real here, and what is not</h3>
+      <p>A demo that overstates itself is worth less than no demo. This is the honest split, and it is on the page rather than in the footnotes because you will ask and the answer should not need to be extracted.</p>
+    </div>
+    <div class="audit">
+      <div>
+        <h4>Real</h4>
+        <ul>
+          <li><b>Every headline figure</b> — 2.80 lakh vehicles, 5–6 crashes a day, the 33/25/15/14 causation split, 42% pedestrian share, 121 pedestrian deaths, 65 identified locations, 19 ORR exits, the 30 sponsored patrol bikes. All published; all sourced at the foot of this page.</li>
+          <li><b>The Module 3 detector</b> runs real local-model inference on uploaded video or photos. Its flags and short tracks need human review; the supplied sample footage is synthetic.</li>
+          <li><b>The arithmetic</b> — the hourly model, the exposure index and the allocator all run live in this page. Move the clock and watch them recompute. Nothing is a pre-rendered picture.</li>
+          <li><b>The calibration</b> — the ORR model is pinned so its 24-hour total reproduces your own published 5.5 crashes a day. It cannot drift away from your number.</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Assumed, and replaceable within the pilot</h4>
+        <ul>
+          <li><b>The hourly shape of each cause.</b> Fatigue peaking before dawn and tyre bursts peaking in afternoon heat are well-established patterns, but the Hyderabad-specific curves need your timestamped crash records. That is the single most valuable dataset you hold.</li>
+          <li><b>Per-exit traffic and heavy-vehicle share</b> — inferred from what each exit connects to. Your toll gantry counts replace this immediately and for free.</li>
+          <li><b>Suppression rates per asset</b> — how much a bike or a marshal actually reduces crashes. Assumed conservatively; measurable directly from a controlled pilot.</li>
+          <li><b>The ten pedestrian stand-ins</b> — illustrative until replaced by uploaded analyses. Real path widths, peak-hour flow and gate distances still require site measurements.</li>
+          <li><b>The street photograph</b> is not Hyderabad CCTV. Production accuracy on autos, hand-carts and two-wheelers requires fine-tuning on local footage — IIIT-Hyderabad's India Driving Dataset was filmed on these roads and is the obvious starting corpus.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE ASK ============ -->
+  <section>
+    <div class="sec-head">
+      <div class="row"><div class="eyebrow">The pilot</div><span class="tag">Ten weeks · ₹10 lakh · paid on acceptance</span></div>
+      <h3>A ten-week paid pilot, with nothing paid until it has been measured</h3>
+      <p>Ten weeks: two to onboard the corridor's crash records and camera feeds, six of shadow operation, two to evaluate against the baseline. The fee is ₹10 lakh, payable only at week ten and only if the agreed result is met. It can come through a corporate sponsor — the route that already delivered 30 patrol bikes to this commissionerate — or through the state's startup procurement route, which at this size needs no tender and no earnest-money deposit. Either way there is no capital sanction and no budget line for the department to defend before the result exists.</p>
+    </div>
+    <div class="asks">
+      <div class="ask">
+        <div>
+          <h4>One corridor and one nodal officer for ten weeks</h4>
+          <p>The ORR between two named exits, plus five to ten city junctions from your existing 65. Access to timestamped crash records for the corridor and to the camera feeds already on those poles, and four patrol bikes carrying a phone mount. No new hardware, no new poles, no live-system integration in the pilot phase.</p>
+        </div>
+      </div>
+      <div class="ask">
+        <div>
+          <h4>A baseline agreed in writing, and shadow mode against it</h4>
+          <p>The system predicts and recommends; it commands nothing and issues no challan. The acceptance test is fixed before week one: whether the placements it recommended would have sat where the corridor's crashes actually happened, and how much of the pedestrian-exposure ranking your own officers confirm on the ground. Meet it and the ₹10 lakh is paid. Miss it and nothing is.</p>
+        </div>
+      </div>
+      <div class="ask">
+        <div>
+          <h4>An introduction, if it goes well</h4>
+          <p>To the TG-TMARS working group under the Chief Secretary, and to T-AIM. A corridor result that holds up is the only credential worth carrying into that room, and it is the one thing we cannot manufacture ourselves.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="note">
+      <b>What we are not asking for.</b> No data-sharing agreement covering personal information, no access to any live enforcement system, no advance, and no payment before a measured result. If the ten weeks show nothing, the pilot ends, the department has spent nothing, and it carries no obligation to continue.
+    </p>
+  </section>
+
+  <footer>
+    <h4>Sources for every published figure on this page</h4>
+    <ol>
+      <li>ORR vehicle load, daily crash count, four-month causation split, and the Commissioner's directives on entry messaging, response times and marshals — <a href="https://munsifdaily.com/hyderabad-orr-road-safety-push-cp-vc-sajjanar/">Hyderabad ORR road safety push, CP V.C. Sajjanar leads high-level meet</a></li>
+      <li>Pedestrian share of victims (42%), 2,312 accidents, 287 deaths, 121 pedestrian deaths, 65 accident-prone areas, Road Accident Analysis Group — <a href="https://www.deccanchronicle.com/nation/current-affairs/231223/hyderabad-witnessed-rise-in-road-accidents-42-of-road-victims-are-pe.html">Hyderabad witnessed rise in road accidents, 42% of road victims are pedestrians</a></li>
+      <li>TG-TMARS review, the Chief Secretary's direction, 429 GHMC signals, participating departments — <a href="https://newsmeter.in/hyderabad/ai-smart-signals-tg-tmars-hyderabad-traffic-management-to-get-tech-makeover-774412">AI, smart signals, TG-TMARS: Hyderabad traffic management to get tech makeover</a></li>
+      <li>ORR length, eight lanes, and the 19 named exits — <a href="https://orrhyderabad.in/">ORR Hyderabad exit numbers and route map</a></li>
+      <li>ORR fatality total over five years and the Exit-14 Tukkuguda stationary-vehicle crash — <a href="https://www.gulte.com/trends/409180/hyderabad-orr-turning-into-a-fatal-corridor">Hyderabad ORR turning into a fatal corridor</a></li>
+      <li>30 traffic patrol bikes and 45 corporate sponsors — <a href="https://thenewsmill.com/2026/07/hyderabad-adds-30-new-traffic-patrol-bikes-and-honours-45-corporate-sponsors/">Hyderabad adds 30 new traffic patrol bikes and honours 45 corporate sponsors</a></li>
+      <li>Arrive Alive road-safety programme — <a href="https://munsifdaily.com/cp-v-c-sajjanar-leads-arrive-alive-program/">CP V.C. Sajjanar leads 'Arrive Alive' programme</a></li>
+      <li>Black spots in Hyderabad and Telangana (22 city, 1,513 state) — <a href="https://www.siasat.com/hyderabad-has-22-accident-black-spots-15-already-rectified-3511855/">Hyderabad has 22 accident black spots, 15 already rectified</a></li>
+    </ol>
+    <p style="margin-top:15px;font-size:12px">Module 3 demo source: <a href="source.zip">download AGPL-3.0 code and model package</a>.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------- model inputs ---------------- */
+
+// Published causation split (four-month ORR review). Residual to 100% is "other".
+var CAUSES = [
+  {id:"fatigue",   label:"Drowsiness / fatigue", share:.33, color:"#1D4ED8"},
+  {id:"negligent", label:"Negligent driving",    share:.25, color:"#D97706"},
+  {id:"speed",     label:"Overspeeding",         share:.15, color:"#0D9488"},
+  {id:"tyre",      label:"Tyre burst",           share:.14, color:"#BE185D"},
+  {id:"other",     label:"Other / unclassified", share:.13, color:"#8A8781"}
+];
+
+// Hour-of-day multipliers. Shapes are the well-established ones: the circadian
+// trough before dawn for fatigue, commute congestion for negligent driving,
+// empty carriageway for speeding, pavement temperature for tyre failure.
+var PROFILE = {
+  fatigue:  [2.0,2.6,3.0,3.1,2.8,2.2,1.4,0.7,0.5,0.4,0.4,0.4,0.5,0.7,0.9,0.9,0.8,0.6,0.5,0.5,0.6,0.9,1.3,1.7],
+  negligent:[0.4,0.3,0.3,0.3,0.3,0.5,0.8,1.4,1.9,1.8,1.3,1.1,1.1,1.1,1.1,1.2,1.5,1.9,2.0,1.8,1.4,1.0,0.7,0.5],
+  speed:    [2.2,2.4,2.5,2.5,2.3,1.9,1.2,0.6,0.4,0.5,0.7,0.8,0.8,0.8,0.8,0.8,0.6,0.4,0.4,0.5,0.8,1.2,1.7,2.1],
+  tyre:     [0.3,0.3,0.2,0.2,0.2,0.3,0.4,0.5,0.7,1.0,1.5,2.0,2.4,2.7,2.8,2.6,2.1,1.5,1.0,0.7,0.5,0.4,0.4,0.3],
+  other:    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+};
+
+// Share of the 2.80 lakh daily vehicles entering in each hour.
+var VOLUME = [.018,.012,.010,.010,.014,.025,.040,.058,.068,.062,.052,.048,
+              .047,.046,.047,.052,.060,.070,.072,.062,.050,.040,.030,.022];
+
+var CONDITIONS = {
+  dry:  {label:"Dry",          fatigue:1,    negligent:1,    speed:1,    tyre:1,   other:1},
+  heat: {label:"Summer heat",  fatigue:1.05, negligent:1,    speed:1,    tyre:1.7, other:1},
+  wet:  {label:"Monsoon",      fatigue:1,    negligent:1.35, speed:0.85, tyre:0.8, other:1.1}
+};
+
+// The 19 ORR exits, in order. vol = relative entering volume, heavy = relative
+// heavy-goods share, both inferred from what each exit connects to.
+var EXITS = [
+  {n:1, name:"Kokapet",          type:"IT corridor",                  vol:0.9, heavy:0.3},
+  {n:2, name:"Edulanagulapally", type:"IT / industrial",              vol:0.8, heavy:0.5},
+  {n:3, name:"Patancheru",       type:"NH-65 freight, Pune side",     vol:1.5, heavy:1.6},
+  {n:4, name:"Sultanpur",        type:"Suburban",                     vol:0.5, heavy:0.6},
+  {n:5, name:"Dundigal",         type:"Suburban",                     vol:0.5, heavy:0.6},
+  {n:6, name:"Medchal",          type:"NH-44 freight, north",         vol:1.4, heavy:1.7},
+  {n:7, name:"Shamirpet",        type:"Suburban / institutional",     vol:0.6, heavy:0.5},
+  {n:8, name:"Keesara",          type:"Suburban",                     vol:0.5, heavy:0.6},
+  {n:9, name:"Ghatkesar",        type:"NH-163 freight, Warangal",     vol:1.1, heavy:1.4},
+  {n:10,name:"Taramatipet",      type:"Suburban",                     vol:0.4, heavy:0.5},
+  {n:11,name:"Pedda Amberpet",   type:"NH-65 freight, Vijayawada",    vol:1.4, heavy:1.6},
+  {n:12,name:"Bonguluru",        type:"Suburban",                     vol:0.5, heavy:0.7},
+  {n:13,name:"Raviryala",        type:"Industrial",                   vol:0.7, heavy:1.0},
+  {n:14,name:"Tukkuguda",        type:"NH-44 freight, south",         vol:1.2, heavy:1.5},
+  {n:15,name:"Pedda Golconda",   type:"Suburban",                     vol:0.4, heavy:0.5},
+  {n:16,name:"Shamshabad",       type:"Airport",                      vol:1.6, heavy:0.4},
+  {n:17,name:"Rajendranagar",    type:"Urban fringe",                 vol:0.9, heavy:0.6},
+  {n:18,name:"TSPA",             type:"Institutional",                vol:0.4, heavy:0.4},
+  {n:19,name:"Nanakramguda",     type:"IT corridor",                  vol:1.5, heavy:0.3}
+];
+
+var DAILY_CRASHES = 5.5;   // midpoint of the published 5-6 per day
+
+// How sensitive an exit is to each cause, from its traffic mix.
+function sens(e, cause){
+  if(cause==="fatigue")   return 0.4 + 0.6*e.heavy;   // long-haul drivers
+  if(cause==="tyre")      return 0.3 + 0.7*e.heavy;   // load and heat on tyres
+  if(cause==="speed")     return 1.3 - 0.4*e.heavy;   // cars, not lorries
+  if(cause==="negligent") return 0.8 + 0.4*(e.vol/1.6);
+  return 1;
+}
+
+// Contribution of one cause at one exit in one hour, before normalisation.
+function raw(e, cause, h, cond){
+  var c = CAUSES.filter(function(x){return x.id===cause;})[0];
+  return e.vol * VOLUME[h] * c.share * PROFILE[cause][h] * sens(e,cause) * CONDITIONS[cond][cause];
+}
+
+// Normaliser so the 24-hour total across all exits equals DAILY_CRASHES.
+function normaliser(cond){
+  var t = 0;
+  for(var h=0; h<24; h++){
+    for(var i=0; i<EXITS.length; i++){
+      for(var j=0; j<CAUSES.length; j++){ t += raw(EXITS[i], CAUSES[j].id, h, cond); }
+    }
+  }
+  return DAILY_CRASHES / t;
+}
+
+// Suppression rates: how much of a given cause one unit of an asset removes.
+var SUPPRESS = {
+  bike:    {speed:.22, negligent:.18, fatigue:.06, tyre:.03, other:.08},
+  marshal: {speed:.05, negligent:.09, fatigue:.20, tyre:.16, other:.07}
+};
+var DECAY = 0.55;   // marginal effect of each additional unit at the same exit
+
+/* ---------------- pedestrian model ---------------- */
+
+var PED_SITES = [
+  {name:"Sultan Bazaar / Koti",        flow:2400, width:2.4, lost:1.5, speed:32},
+  {name:"Secunderabad Station, SD Rd", flow:2900, width:3.0, lost:1.6, speed:38},
+  {name:"Ameerpet Metro approach",     flow:2600, width:2.6, lost:1.2, speed:40},
+  {name:"Dilsukhnagar bus bay",        flow:2200, width:2.2, lost:1.4, speed:44},
+  {name:"Charminar / Laad Bazaar",     flow:3100, width:2.0, lost:1.5, speed:22},
+  {name:"Mehdipatnam Rythu Bazaar",    flow:1900, width:2.4, lost:1.3, speed:42},
+  {name:"Abids GPO",                   flow:1700, width:2.8, lost:1.1, speed:34},
+  {name:"Punjagutta junction",         flow:1500, width:3.2, lost:1.0, speed:46},
+  {name:"KPHB main road",              flow:1400, width:2.6, lost:1.1, speed:40},
+  {name:"Begumpet, Prakash Nagar",     flow:1200, width:2.4, lost:0.9, speed:44}
+];
+
+/* ---------------- state & helpers ---------------- */
+
+var state = {h:3, cond:"dry", bikes:12, marshals:8};
+var NORM = {};
+["dry","heat","wet"].forEach(function(c){ NORM[c] = normaliser(c); });
+
+function $(id){ return document.getElementById(id); }
+function pad(n){ return (n<10?"0":"") + n; }
+function hhmm(h){ return pad(h) + ":00"; }
+function esc(s){ return String(s).replace(/[&<>]/g, function(m){ return {"&":"&amp;","<":"&lt;",">":"&gt;"}[m]; }); }
+function rampColor(t){
+  var ramp = ["#FBE7DA","#F4C5A3","#E79669","#D3653B","#A73B19","#74210B"];
+  var i = Math.min(ramp.length-1, Math.max(0, Math.floor(t*ramp.length)));
+  return ramp[i];
+}
+
+/* ---------------- computation ---------------- */
+
+function causeTotals(h, cond){
+  var out = {}, sum = 0;
+  CAUSES.forEach(function(c){
+    var v = 0;
+    EXITS.forEach(function(e){ v += raw(e, c.id, h, cond); });
+    out[c.id] = v; sum += v;
+  });
+  out._sum = sum;
+  return out;
+}
+
+function exitLoads(h, cond){
+  var k = NORM[cond];
+  return EXITS.map(function(e){
+    var byCause = {}, tot = 0;
+    CAUSES.forEach(function(c){
+      var v = raw(e, c.id, h, cond) * k;
+      byCause[c.id] = v; tot += v;
+    });
+    var dom = CAUSES[0].id, best = -1;
+    CAUSES.forEach(function(c){ if(byCause[c.id] > best){ best = byCause[c.id]; dom = c.id; } });
+    return {exit:e, byCause:byCause, total:tot, dom:dom};
+  }).sort(function(a,b){ return b.total - a.total; });
+}
+
+// A deployment is a six-hour shift, not a single hour: h-3 .. h+2.
+function shiftHours(h){
+  var out = [];
+  for(var d=-3; d<=2; d++){ out.push(((h + d) % 24 + 24) % 24); }
+  return out;
+}
+function shiftLabel(h){
+  var hs = shiftHours(h);
+  return hhmm(hs[0]) + "–" + hhmm((hs[5] + 1) % 24);
+}
+function shiftLoads(h, cond){
+  var k = NORM[cond], hs = shiftHours(h);
+  return EXITS.map(function(e){
+    var byCause = {}, tot = 0;
+    CAUSES.forEach(function(c){
+      var v = 0;
+      hs.forEach(function(hh){ v += raw(e, c.id, hh, cond) * k; });
+      byCause[c.id] = v; tot += v;
+    });
+    var dom = CAUSES[0].id, best = -1;
+    CAUSES.forEach(function(c){ if(byCause[c.id] > best){ best = byCause[c.id]; dom = c.id; } });
+    return {exit:e, byCause:byCause, total:tot, dom:dom};
+  }).sort(function(a,b){ return b.total - a.total; });
+}
+
+function allocate(loads, bikes, marshals){
+  var placed = {}, out = [];
+  function step(kind){
+    var bestIdx = -1, bestGain = 0;
+    for(var i=0; i<loads.length; i++){
+      var key = loads[i].exit.n + ":" + kind;
+      var used = placed[key] || 0;
+      var gain = 0;
+      CAUSES.forEach(function(c){
+        gain += loads[i].byCause[c.id] * SUPPRESS[kind][c.id];
+      });
+      gain *= Math.pow(DECAY, used);
+      if(gain > bestGain){ bestGain = gain; bestIdx = i; }
+    }
+    if(bestIdx < 0) return null;
+    var key2 = loads[bestIdx].exit.n + ":" + kind;
+    placed[key2] = (placed[key2] || 0) + 1;
+    return {load:loads[bestIdx], kind:kind, gain:bestGain, nth:placed[key2]};
+  }
+  var b = bikes, m = marshals;
+  while(b > 0 || m > 0){
+    var cb = b > 0 ? step("bike") : null;
+    if(cb) { out.push(cb); b--; }
+    var cm = m > 0 ? step("marshal") : null;
+    if(cm) { out.push(cm); m--; }
+    if(!cb && !cm) break;
+  }
+  out.sort(function(x,y){ return y.gain - x.gain; });
+  return out;
+}
+
+/* ---------------- rendering ---------------- */
+
+function renderStack(){
+  var t = causeTotals(state.h, state.cond);
+  var stack = $("stack"), legend = $("legend");
+  stack.innerHTML = ""; legend.innerHTML = "";
+  CAUSES.forEach(function(c){
+    var pct = t[c.id] / t._sum * 100;
+    var seg = document.createElement("div");
+    seg.className = "seg";
+    seg.style.background = c.color;
+    seg.style.flexGrow = pct;
+    seg.style.flexBasis = "0";
+    if(pct > 11){
+      var s = document.createElement("span");
+      s.textContent = Math.round(pct) + "%";
+      seg.appendChild(s);
+    }
+    stack.appendChild(seg);
+
+    var lg = document.createElement("div");
+    lg.className = "lg";
+    lg.innerHTML = '<i style="background:' + c.color + '"></i>' + esc(c.label) + "<b>" + pct.toFixed(0) + "%</b>";
+    legend.appendChild(lg);
+  });
+
+  // the shift note — compare against the published annual average
+  var top = CAUSES.slice().sort(function(a,b){ return t[b.id] - t[a.id]; })[0];
+  var pctNow = t[top.id] / t._sum * 100;
+  var delta = pctNow - top.share * 100;
+  var dir = delta >= 0 ? "above" : "below";
+  $("shift-note").textContent =
+    "At " + hhmm(state.h) + ", " + top.label.toLowerCase() + " accounts for " + pctNow.toFixed(0) +
+    "% of expected crashes — " + Math.abs(delta).toFixed(0) + " points " + dir +
+    " its all-hours average of " + (top.share*100).toFixed(0) + "%. " +
+    (top.id === "fatigue"
+      ? "A speed camera does not address this. A rest prompt at the entry gantry and a marshal at the freight exits does."
+      : top.id === "tyre"
+      ? "This is a pavement-temperature problem. The intervention is a tyre-pressure advisory at the toll plaza, not enforcement."
+      : top.id === "negligent"
+      ? "This is congestion behaviour. Visible patrol presence is the effective lever here."
+      : "This is the window where patrol placement and speed enforcement earn the most.");
+  $("cause-hour").textContent = hhmm(state.h);
+}
+
+function renderSMS(loads){
+  var top = loads[0];
+  var c = top.dom;
+  var e = top.exit;
+  var texts = {
+    fatigue: "You are entering at <b>" + esc(e.name) + " (Exit " + e.n + ")</b>. One in three ORR crashes is fatigue-related, and most happen between 1 and 5 am. If you have been driving more than three hours, use the rest bay ahead before you continue.",
+    tyre: "You are entering at <b>" + esc(e.name) + " (Exit " + e.n + ")</b>. Road surface is hot. Tyre failure causes around one in seven ORR crashes. Check pressure at the next plaza and hold below 80 km/h if your load is heavy.",
+    speed: "You are entering at <b>" + esc(e.name) + " (Exit " + e.n + ")</b>. The carriageway is clear, which is when speeds climb. Enforcement is active on this stretch tonight. Please hold the posted limit.",
+    negligent: "You are entering at <b>" + esc(e.name) + " (Exit " + e.n + ")</b>. Heavy traffic ahead with frequent lane changes. Keep two seconds of gap. Patrol units are on this stretch.",
+    other: "You are entering at <b>" + esc(e.name) + " (Exit " + e.n + ")</b>. Do not stop on the carriageway except in a breakdown. If you must stop, call the ORR helpline before you leave the vehicle."
+  };
+  $("sms").innerHTML = texts[c] || texts.other;
+  $("sms-time").textContent = hhmm(state.h) + " · on FASTag entry read";
+}
+
+function renderRank(loads){
+  var wrap = $("rank");
+  wrap.innerHTML = "";
+  var max = loads[0].total;
+  var hourTotal = loads.reduce(function(s,l){ return s + l.total; }, 0);
+  $("rank-total").textContent = hourTotal.toFixed(2) + " expected crashes this hour";
+  loads.slice(0, 8).forEach(function(l){
+    var t = l.total / max;
+    var share = hourTotal > 0 ? l.total / hourTotal * 100 : 0;
+    var domLabel = CAUSES.filter(function(c){ return c.id === l.dom; })[0].label;
+    var row = document.createElement("div");
+    row.className = "rk";
+    row.innerHTML =
+      '<div class="ex">' + pad(l.exit.n) + '</div>' +
+      '<div><div class="nm">' + esc(l.exit.name) + '</div>' +
+      '<div class="ty">' + esc(l.exit.type) + ' · leading risk: ' + esc(domLabel.toLowerCase()) + '</div>' +
+      '<div class="bar" style="width:' + (t*100).toFixed(1) + '%;background:' + rampColor(t) + '"></div></div>' +
+      '<div class="vl">' + share.toFixed(0) + '%<small>of this hour</small></div>';
+    wrap.appendChild(row);
+  });
+}
+
+function renderRoster(){
+  var loads = shiftLoads(state.h, state.cond);
+  var plan = allocate(loads, state.bikes, state.marshals);
+  var body = $("roster");
+  body.innerHTML = "";
+  var hourTotal = loads.reduce(function(s,l){ return s + l.total; }, 0);
+  var averted = plan.reduce(function(s,p){ return s + p.gain; }, 0);
+  $("shift-lbl").textContent = shiftLabel(state.h);
+
+  if(plan.length === 0){
+    body.innerHTML = '<tr><td colspan="5" style="color:var(--ink-3);padding:16px 0">' +
+      'No assets assigned. Raise either slider to generate a placement roster.</td></tr>';
+  }
+  plan.slice(0, 10).forEach(function(p, i){
+    var domLabel = CAUSES.filter(function(c){ return c.id === p.load.dom; })[0].label;
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td class="mono" style="color:var(--ink-3)">' + pad(i+1) + '</td>' +
+      '<td><b>' + esc(p.load.exit.name) + '</b> <span style="color:var(--ink-3)">Exit ' + p.load.exit.n + '</span>' +
+        (p.nth > 1 ? ' <span style="color:var(--ink-3);font-size:11.5px">· unit ' + p.nth + '</span>' : '') +
+        '<div style="font-size:11.5px;color:var(--ink-3)">' + esc(p.load.exit.type) + '</div></td>' +
+      '<td><span class="asset ' + p.kind + '">' + (p.kind === "bike" ? "Patrol bike" : "Marshal") + '</span></td>' +
+      '<td style="font-size:12.5px;color:var(--ink-2)">' + esc(domLabel) + '</td>' +
+      '<td class="num">' + p.gain.toFixed(2) + '</td>';
+    body.appendChild(tr);
+  });
+
+  $("ro-averted").textContent = averted.toFixed(2);
+  $("ro-year").textContent = "≈ " + Math.round(averted * 365).toLocaleString("en-IN");
+  $("ro-cover").textContent = hourTotal > 0 ? Math.round(averted / hourTotal * 100) + "%" : "—";
+  $("ro-lead").textContent = plan.length ? plan[0].load.exit.name : "—";
+  $("ro-lead").style.fontSize = "17px";
+}
+
+function renderPed(){
+  var rows = PED_SITES.map(function(s){
+    var displaced = s.flow * (s.lost / s.width);
+    var speedFactor = Math.pow(s.speed / 30, 1.5);
+    return {s:s, displaced:displaced, index:displaced * speedFactor};
+  }).sort(function(a,b){ return b.index - a.index; });
+  var max = rows[0].index;
+  var body = $("ped-rows");
+  body.innerHTML = "";
+  rows.forEach(function(r){
+    var t = r.index / max;
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td><b>' + esc(r.s.name) + '</b><div style="font-size:11.5px;color:var(--ink-3)">' +
+        r.s.width.toFixed(1) + ' m footpath · traffic at ' + r.s.speed + ' km/h</div></td>' +
+      '<td class="num">' + r.s.flow.toLocaleString("en-IN") + '</td>' +
+      '<td class="num">' + r.s.lost.toFixed(1) + ' m</td>' +
+      '<td class="num">' + Math.round(r.displaced).toLocaleString("en-IN") + '</td>' +
+      '<td class="num"><span style="display:inline-block;padding:2px 7px;background:' + rampColor(t) +
+        ';color:' + (t > 0.6 ? "#FFF" : "#16211D") + '">' + Math.round(r.index/max*100) + '</span></td>';
+    body.appendChild(tr);
+  });
+}
+
+function renderAll(){
+  var loads = exitLoads(state.h, state.cond);
+  $("clock").textContent = hhmm(state.h);
+  renderStack();
+  renderSMS(loads);
+  renderRank(loads);
+  renderRoster();
+}
+
+/* ---------------- wiring ---------------- */
+
+$("hour").addEventListener("input", function(e){
+  state.h = parseInt(e.target.value, 10);
+  renderAll();
+});
+$("bikes").addEventListener("input", function(e){
+  state.bikes = parseInt(e.target.value, 10);
+  $("bikes-n").textContent = state.bikes;
+  renderRoster();
+});
+$("marshals").addEventListener("input", function(e){
+  state.marshals = parseInt(e.target.value, 10);
+  $("marshals-n").textContent = state.marshals;
+  renderRoster();
+});
+Array.prototype.forEach.call(document.querySelectorAll(".conds button"), function(btn){
+  btn.addEventListener("click", function(){
+    state.cond = btn.dataset.c;
+    Array.prototype.forEach.call(document.querySelectorAll(".conds button"), function(b){
+      b.setAttribute("aria-pressed", String(b === btn));
+    });
+    renderAll();
+  });
+});
+
+renderAll();
+renderPed();
+})();
+</script>
+<script src="static/proposal-module3.js"></script>
+
+</body></html>

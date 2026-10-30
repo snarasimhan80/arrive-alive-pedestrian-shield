@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedestrian Shield | {{ 'Hosted' if hosted else 'Local' }} video test</title>
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body data-hosted="{{ 'true' if hosted else 'false' }}" data-embedded="{{ 'true' if embedded else 'false' }}">
+  <main class="shell">
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">Arrive Alive AI / Module 3</p>
+        <h1>Pedestrian Shield</h1>
+        <p class="dek">Test footpath blockages, pedestrian movement, and the PRD’s FR-23/24/25 exposure ranking using video analyzed {{ 'on this server' if hosted else 'on this computer' }}.</p>
+      </div>
+      <div class="local-badge">{{ 'HOSTED DEMO' if hosted else 'LOCAL DEMO' }}<br><span>{{ 'Video analyzed on this server' if hosted else 'No camera or cloud connection' }}</span></div>
+    </header>
+
+    <div class="notice">
+      <strong>What the results mean:</strong> FR-23 estimates how many people might be displaced from path width lost and pedestrian flow. FR-24 weights that estimate by traffic speed. FR-25 compares sites. These are planning estimates, not observed crash probabilities; video detections require review.
+    </div>
+
+    <section id="detector-site-table" class="step" aria-labelledby="site-table-title">
+      <div class="step-head"><span class="step-number">FR-25</span><div><h2 id="site-table-title">Compare sites</h2><p>Rank selected analyses by speed weighted exposure. The highest complete site is 100; other scores are relative to it. A single site scores 100 by definition, not because its absolute risk is high.</p></div></div>
+      <div class="toolbar"><button id="show-my-sites" type="button" class="button button-plain">My analyzed sites</button><button id="show-demo-sites" type="button" class="button button-plain">Show synthetic example</button><button id="copy-sites-link" type="button" class="button button-plain hidden">Copy comparison link</button><button id="download-sites-csv" type="button" class="button button-plain hidden">Download table CSV</button><button id="clear-my-sites" type="button" class="button button-plain">Clear my list</button></div>
+      <p id="site-table-note" class="muted" role="status">Analyze a clip to add a site, or open the synthetic example.</p>
+      <p class="muted table-swipe-hint">Swipe the table sideways to see pedestrian flow, speed and exposure score →</p>
+      <div class="table-scroll"><table id="site-table" class="site-table hidden"><thead><tr><th>Site</th><th>Path width</th><th>Width lost</th><th>Peak flow / h</th><th>Speed</th><th>Estimated displaced / h</th><th>Relative exposure</th></tr></thead><tbody id="site-table-body"></tbody></table></div>
+    </section>
+
+    <section class="step" aria-labelledby="step1">
+      <div class="step-head"><span class="step-number">01</span><div><h2 id="step1">Choose a short video or photo</h2><p>Use a fixed street view where the footpath is visible. MP4, MOV, AVI, MKV, JPG or PNG; video up to {{ max_video_seconds }} seconds and {{ max_upload_mb }} MB.</p></div></div>
+      <form id="upload-form" class="upload-row">
+        <input id="source-file" type="file" accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,image/jpeg,image/png,.mp4,.mov,.avi,.mkv,.jpg,.jpeg,.png" required>
+        <button type="submit" class="button button-primary">Load file</button>
+      </form>
+      <p id="file-status" class="muted" role="status">{{ ('Your file is uploaded to this demo server. Analysis files are removed after ' ~ job_ttl_hours ~ ' hours on the next request; anyone with a result link can view its output.') if hosted else 'Your file stays on this computer.' }}</p>
+      <p class="muted">For the full walkthrough, <a href="sample-moving.mp4" download="indian-footpath-continuous-motion.mp4">download the 29.5-second moving Indian street sample</a>, upload it, and use the sample preset. It contains a blocked footpath, moving pedestrians and passing cars. It is synthetic footage for testing the workflow, not real CCTV or proof of detection accuracy. The older <a href="sample.mp4" download>clear-to-blocked sample</a> and <a href="sample-pedestrians.mp4" download>pedestrian-cue still-image clip</a> remain available.</p>
+    </section>
+
+    <section id="mark-section" class="step hidden" aria-labelledby="step2">
+      <div class="step-head"><span class="step-number">02</span><div><h2 id="step2">Mark and measure the site</h2><p>Name the site. Mark the fixed footpath and adjacent roadway on the first frame. Optional width and count lines give experimental video measurements; surveyed values can be entered below.</p></div></div>
+      <label class="site-name-label">Site name <input id="site-name" type="text" maxlength="80" placeholder="e.g. Market Road, east camera" required></label>
+      <button id="sample-setup" type="button" class="button button-plain hidden">Fill marks and synthetic values for supplied sample</button>
+      <p id="sample-setup-note" class="muted hidden">Synthetic sample measurements are illustrative.</p>
+      <div class="mode-row" aria-label="Choose what to mark"><button id="mode-footpath" class="button button-plain mode-active" type="button">Footpath</button><button id="mode-road" class="button button-plain" type="button">Roadway</button><button id="mode-width" class="button button-plain" type="button">Blocked width line</button><button id="mode-flow" class="button button-plain" type="button">Pedestrian count line</button><button id="mode-speed" class="button button-plain" type="button">Speed gates</button></div>
+      <p id="mode-help" class="muted">Footpath: click at least three corners of the walking area.</p>
+      <div class="canvas-wrap"><canvas id="preview-canvas" aria-label="Click points to mark the selected area or speed gates"></canvas></div>
+      <div class="toolbar">
+        <span id="point-count" class="muted">0 points</span>
+        <button id="undo-point" type="button" class="button button-plain">Undo point</button>
+        <button id="reset-points" type="button" class="button button-plain">Clear selected marks</button>
+      </div>
+      <details class="calibration-details"><summary>Optional: measure vehicle speed from this video</summary><p class="muted">Mark the roadway first. Select Speed gates and click two points for gate A, then two for gate B, across the same traffic lane. Enter the measured ground distance between gates. Vehicles must visibly move through both; a still image or the supplied two-still sample cannot yield speed.</p><label>Real distance between gates (metres) <input id="gate-distance" type="number" min="1" max="100" step="0.1" placeholder="e.g. 10"></label></details>
+      <details class="calibration-details" open><summary>Site measurements for FR-23 and FR-24</summary><p class="muted">Measure the path width on site. A blocked-width line across the obstruction can make a provisional video estimate; a surveyed obstruction width takes precedence. A short clip cannot establish the peak hour, so enter a measured peak flow when available. Every value retains its source.</p><div class="measure-grid"><label>Footpath width (m) <input id="footpath-width" type="number" min="0.5" max="20" step="0.1" placeholder="e.g. 2.0"><select id="footpath-width-source"><option value="">Width source</option><option value="site measurement">Site measurement</option><option value="synthetic demo value">Synthetic demo value</option></select></label><label>Width lost (m), if measured <input id="width-lost" type="number" min="0" max="20" step="0.1" placeholder="Otherwise mark width line"><select id="width-lost-source"><option value="">Lost-width source</option><option value="site measurement">Site measurement</option><option value="synthetic demo value">Synthetic demo value</option></select></label><label>Peak pedestrian flow (people/hour) <input id="peak-flow" type="number" min="0" max="100000" step="1" placeholder="Peak-hour count"><select id="flow-source"><option value="">Flow source</option><option value="peak-hour manual count">Peak-hour manual count</option><option value="synthetic demo value">Synthetic demo value</option></select></label><label>Traffic speed (km/h), if video gates cannot measure it <input id="traffic-speed" type="number" min="5" max="120" step="0.1" placeholder="Survey or assumption"><select id="speed-source"><option value="">Speed source</option><option value="measured survey or radar">Measured survey or radar</option><option value="planning assumption">Planning assumption</option><option value="synthetic demo value">Synthetic demo value</option></select></label></div><label class="checkbox-label"><input id="use-clip-flow" type="checkbox"> If no peak-hour count is available, use the short clip’s pedestrian count rate as a <strong>synthetic/demo assumption</strong> (requires a count line, at least 15 seconds and 3 crossings).</label></details>
+      <div class="settings-row">
+        <label for="overlap">Flag when a detected vehicle's lower visible area overlaps the footpath by at least</label>
+        <select id="overlap"><option value="0.08">8% — more sensitive</option><option value="0.12" selected>12% — default</option><option value="0.20">20% — fewer alerts</option></select>
+      </div>
+      <button id="analyze" type="button" class="button button-primary" disabled>{{ 'Analyze on server' if hosted else 'Analyze locally' }}</button>
+    </section>
+
+    <section id="progress-section" class="step hidden" aria-labelledby="step3">
+      <div class="step-head"><span class="step-number">03</span><div><h2 id="step3">Analyzing frames</h2><p id="progress-text" role="status">Loading the local model…</p></div></div>
+      <div class="progress-track"><div id="progress-fill"></div></div>
+    </section>
+
+    <section id="result-section" class="step hidden" aria-labelledby="result-title">
+      <div class="step-head"><span class="step-number">04</span><div><h2 id="result-title">Review the evidence</h2><p>Check each flag. Correct and false-alarm choices are saved with this run.</p></div></div>
+      <p id="clip-status" class="clip-status"></p>
+      <p id="result-url" class="muted"></p>
+      <div id="summary" class="summary"></div>
+      <div id="downloads" class="downloads"></div>
+      <div id="video-panel" class="video-panel hidden"><h3>Annotated sample of the video</h3><p class="muted">Frames are sampled at about two per second, or about four when speed gates are set. The original clip is not altered.</p><video id="annotated-video" controls playsinline></video></div>
+      <h3>Possible obstructions</h3>
+      <div id="events" class="event-grid"></div>
+      <h3>People and exposure</h3>
+      <div id="people-summary" class="signal-panel"></div>
+      <div id="person-evidence" class="event-grid"></div>
+      <h3>FR-23 and FR-24: estimated displacement and exposure</h3>
+      <div id="exposure-summary" class="signal-panel"></div>
+      <details class="clear-details"><summary>Frames with no vehicle blockage detected</summary><p class="muted">These are model outputs, not a guarantee that the path is clear.</p><div id="clear-frames" class="clear-grid"></div></details>
+      <form id="miss-form" class="miss-form"><h3>Found one the model missed?</h3><p class="muted">Record the time and what it missed. This is useful labelling for the next model test.</p><div class="miss-controls"><label>Time in seconds <input id="miss-seconds" type="number" min="0" step="0.1" required></label><label>What was missed? <input id="miss-note" type="text" maxlength="240" required placeholder="e.g. parked scooter on footpath"></label><button class="button button-plain" type="submit">Save missed finding</button></div><p id="miss-status" class="muted" role="status"></p></form>
+      <button id="new-file" class="button button-primary" type="button">Analyze another file</button>
+    </section>
+
+    <footer>Generic vision model · human review required · no calibrated crash or mortality prediction{% if source_url %} · <a href="{{ source_url }}" target="_blank" rel="noopener noreferrer">AGPL source code</a>{% endif %}</footer>
+  </main>
+  <script src="static/app.js" defer></script>
+</body>
+</html>
